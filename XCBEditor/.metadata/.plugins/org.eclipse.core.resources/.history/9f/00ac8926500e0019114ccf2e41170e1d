@@ -1,0 +1,7 @@
+package XCBVisualEditor.XCBJson;
+
+public class SyncJsonReader {
+	public SyncJsonReader(String path) {
+		
+	}
+}

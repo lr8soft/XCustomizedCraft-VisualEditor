@@ -1,0 +1,7 @@
+package XCBVisualEditor;
+
+public class XCustomizedMainLoader {
+	public static void main(String[] args) {
+		
+	}
+}

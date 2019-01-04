@@ -1,0 +1,29 @@
+package XCBVisualEditor;
+
+import java.awt.EventQueue;
+
+import XCBVisualEditor.XCBVisualEditor.XCBConfigLoad;
+import XCBVisualEditor.XCBVisualEditor.XCBVisualEditorMain;
+
+public class XCustomizedMainLoader {
+	public static XCBConfigLoad configload;
+	public static XCBVisualEditorMain vemain;
+	public static void main(String[] args) {
+		configload = new XCBConfigLoad();
+		configload.frmXcustomizedbladeVisualeditor.setVisible(true);
+
+
+		//vemain
+	}
+	
+}
+/*EventQueue.invokeLater(new Runnable() {
+public void run() {
+	try {
+		XCBConfigLoad window = new XCBConfigLoad();
+		window.frmXcustomizedbladeVisualeditor.setVisible(true);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
+});*/

@@ -1,0 +1,37 @@
+package XCBVisualEditor.XCBUtil;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.JOptionPane;
+
+import com.google.gson.JsonObject;
+
+public class XCBLoadFromNet {
+	public static JsonObject get(String url) {  
+		    HttpClient client = new DefaultHttpClient();   
+		        HttpGet get = new HttpGet(url);   
+		        JsonObject json = null;   
+		        try {   
+		            HttpResponse res = client.execute(get);   
+		            if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {   
+		                HttpEntity entity = res.getEntity();   
+		                json = new JSONObject(new JSONTokener(new InputStreamReader(entity.getContent(), HTTP.UTF_8)));   
+		            }   
+		        } catch (Exception e) {   
+		            throw new RuntimeException(e);   
+		               
+		        } finally{   
+		            //关闭连接 ,释放资源   
+		            client.getConnectionManager().shutdown();   
+		        }   
+		        return json;   
+		    }   
+}

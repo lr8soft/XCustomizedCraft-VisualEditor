@@ -1,0 +1,12 @@
+package XCBVisualEditor.XCBJson;
+
+import com.google.gson.JsonObject;
+
+public class SyncJsonReader {
+	private String jsonpath;
+	private JsonObject jsondata;
+	public SyncJsonReader(String path) {
+		this.jsonpath=path;
+		
+	}
+}

@@ -1,0 +1,20 @@
+package XCBVisualEditor;
+
+import java.awt.EventQueue;
+
+import XCBVisualEditor.XCBVisualEditor.XCBConfigLoad;
+
+public class XCustomizedMainLoader {
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					XCBConfigLoad window = new XCBConfigLoad();
+					window.frmXcustomizedbladeVisualeditor.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+}

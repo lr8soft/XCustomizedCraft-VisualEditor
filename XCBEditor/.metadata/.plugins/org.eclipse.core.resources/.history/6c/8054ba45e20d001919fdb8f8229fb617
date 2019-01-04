@@ -1,0 +1,18 @@
+package XCBVisualEditor;
+
+public class XCustomizedSAInfo {
+	public String SAName;
+	public String SAStep[];
+	public int SACount[];
+	public float StepDamage[];
+	public int StepCount,SAcost,SANum;
+	public XCustomizedSAInfo(String name,int SANum,String info[],int count[],float StepDamage[],int step,int cost) {
+		this.SANum=SANum;
+		this.SAName=name;
+		this.SAStep=info;
+		this.SAcost=cost;
+		this.SACount=count;
+		this.StepCount=step;
+		this.StepDamage=StepDamage;
+	}
+}

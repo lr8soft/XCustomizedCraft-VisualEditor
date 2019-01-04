@@ -1,0 +1,164 @@
+package XCBVisualEditor.XCBJson;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+
+import XCBVisualEditor.XCBUtil.XCBToJsonArray;
+
+
+public class SAConfigJsonReader {
+	private JsonObject jsoninfo;
+	private String jsonpath;
+	public JsonArray jsondata;
+	public boolean willSARun;
+	private JsonArray tSAStep,tStepCount,tStepDamage;
+	private String[] SAStep;
+	private int[] StepCount;
+	private float[] StepDamage;
+	public SAConfigJsonReader(String path) {
+		this.jsonpath=path;
+		this.willSARun=true;
+		JsonParser jp=new JsonParser();
+		try {
+			jsoninfo=(JsonObject)jp.parse(new FileReader(jsonpath));
+			try {
+				if(jsoninfo.get("XCustomizedBladeVER").getAsDouble()>=1.40) {
+					jsondata=jsoninfo.get("XCustomizedSA").getAsJsonArray();
+				}else {
+					this.willSARun=false;
+				}
+			}catch(Exception e) {this.willSARun=false;}
+		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+			System.out.println("XCustomizedSA:Fail to load from config.");
+			this.willSARun=false;
+		}
+	}
+	public boolean isExisted(String name) {
+		for(int i=0;i<jsondata.size();i++) {
+			JsonObject temp=jsondata.get(i).getAsJsonObject();
+			try {
+				String tempName=temp.get("SAName").getAsString();
+				System.out.println(i+"\t"+tempName+"\t"+name);
+				System.out.println(tempName.trim().equals(name.trim()));
+
+				if("tes".equals("tes")) {
+					System.out.println("XCC Info:"+temp.get("BladeName").getAsString()+"~"+name+" is existed.");
+					return true;
+				}
+				System.out.println("After if");
+			}catch(NullPointerException e) {
+				continue;
+			}
+		}
+		System.out.println("XCC Info:"+name+" isn\'t existed.");
+		return false;
+	}
+	public int deleteToJson(String name) {
+		if(name.equals(null)) return -1;
+		for(int i=0;i<jsondata.size();i++) {
+			JsonObject temp=jsondata.get(i).getAsJsonObject();
+			try {
+				if(temp.get("SAName").getAsString().equals(name)) {
+					temp.remove("SAName");temp.remove("SANumber");
+					temp.remove("SACost");temp.remove("SAInfo");
+					temp.remove("StepDamage");temp.remove("SAStep");
+					temp.remove("BladeStandBy");temp.remove("BladeSA");
+					temp.remove("SACount");
+					this.jsoninfo.remove("XCustomizedSA");
+					this.jsoninfo.add("XCustomizedSA", jsondata);
+					Gson out=new Gson();
+					try {
+						FileOutputStream output=new FileOutputStream(jsonpath);
+						output.write(out.toJson(jsoninfo).getBytes());
+						output.close();
+					} catch (FileNotFoundException e) {
+						System.out.println("XCC Error:"+e.getMessage());
+						return -1;
+					} catch (IOException e) {
+						System.out.println("XCC Error:"+e.getMessage());
+						return -1;
+					}
+					return 1;
+				}
+			}catch(NullPointerException e) {
+				continue;
+			}
+		}
+		return 0;
+	}
+	public int changeToJson(String name,int num,int cost,String[] step,int[] count,int[] damage) {
+		System.out.println("XCC Info:Try to replace the old blade->"+name);
+		for(int i=0;i<jsondata.size();i++) {
+			JsonObject temp=jsondata.get(i).getAsJsonObject();
+			try {
+				if(temp.get("SAName").getAsString().equals(name)) {
+					temp.remove("SAName");temp.addProperty("SAName", name);
+					temp.remove("SANumber");temp.addProperty("SANumber",num);
+					temp.remove("SACost");temp.addProperty("SACost",cost);
+					temp.remove("SAInfo");temp.add("SAInfo", XCBToJsonArray.StringToJsonArray(step));
+					temp.remove("StepDamage");temp.add("StepDamage", XCBToJsonArray.IntToJsonArray(damage));
+					temp.remove("SAStep");temp.add("SAStep", XCBToJsonArray.IntToJsonArray(count));
+					temp.remove("SACount");temp.addProperty("SACount",step.length);
+					this.jsondata.add(temp);
+					this.jsoninfo.add("XCustomizedSA", jsondata);
+					Gson out=new Gson();
+					try {
+						FileOutputStream output=new FileOutputStream(jsonpath);
+						output.write(out.toJson(jsoninfo).getBytes());
+						output.close();
+					} catch (FileNotFoundException e) {
+						System.out.println("XCC Error:"+e.getMessage());
+						return 0;
+					} catch (IOException e) {
+						System.out.println("XCC Error:"+e.getMessage());
+						return 0;
+					}
+					return 2;
+				}
+			}catch(NullPointerException e) {
+				continue;
+			}
+		}
+		return 0;
+	}
+	public int addToJson(String name,int num,int cost,String[] step,int[] count,int[] damage) {
+		boolean ret=isExisted(name);
+		if(!ret) {
+			JsonObject temp=new JsonObject();
+			temp.addProperty("SAName", name);temp.addProperty("SANumber", num);
+			temp.addProperty("SACost", cost);
+			temp.add("SAInfo", XCBToJsonArray.StringToJsonArray(step));
+			temp.add("StepDamage", XCBToJsonArray.IntToJsonArray(damage));
+			temp.add("SAStep", XCBToJsonArray.IntToJsonArray(count));
+			temp.addProperty("SACount", step.length);
+			this.jsondata.add(temp);
+			this.jsoninfo.add("XCustomizedSA", jsondata);
+			Gson out=new Gson();
+			try {
+				FileOutputStream output=new FileOutputStream(jsonpath);
+				output.write(out.toJson(jsoninfo).getBytes());
+				output.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("XCC Error:"+e.getMessage());
+				return 0;
+			} catch (IOException e) {
+				System.out.println("XCC Error:"+e.getMessage());
+				return 0;
+			}
+			return 1;
+		}else {
+			int rret=changeToJson(name,num,cost,step,count,damage);
+			return rret;
+		}
+	}
+}

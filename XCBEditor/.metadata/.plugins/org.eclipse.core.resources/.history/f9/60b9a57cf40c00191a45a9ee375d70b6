@@ -1,0 +1,15 @@
+package XCBVisualEditor.XCBUtil;
+
+public class XCBGetPath {
+	 public static String getNowPath() {
+			File directory = new File("");
+			String courseFile=null;
+			try {
+				courseFile = directory.getCanonicalPath();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+			return courseFile;
+	 }
+
+}
