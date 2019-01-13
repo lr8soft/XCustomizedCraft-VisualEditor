@@ -26,9 +26,11 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JCheckBox;
 
 public class XCBVisualSpecialAttack {
 	public JFrame frmXCBVisualSA;
+	private JCheckBox attackSelect;
 	private JTextField saName;
 	private JTextField saUuid;
 	private JTextField saCost;
@@ -40,8 +42,9 @@ public class XCBVisualSpecialAttack {
 	private Vector stepCount=new Vector();
 	private Vector stepDamage=new Vector();
 	private XCBVisualSpecialAttack classTemp;
-	String[] sainfo= {"幻影剑(一根)","终焉樱","闪电","MaximumBet(快速两斩)","平突","爆炸","次元斩"};
-	//                      0          1      2         3               4     5      6    
+	private boolean allAttack;
+	String[] sainfo= {"幻影剑(一根)","终焉樱","闪电","MaximumBet(快速两斩)","平突","爆炸","次元斩","延时(测试 单机有效)"};
+	//                      0          1      2         3               4     5      6         7
 	public XCBVisualSpecialAttack(SAConfigJsonReader data,String input) {
 		this.classTemp=this;
 		this.jsondata=data;
@@ -57,6 +60,7 @@ public class XCBVisualSpecialAttack {
 			for(int i=0;i<value.StepCount;i++) {
 				System.out.println(value.SAStep[i]+" Count:"+value.SACount[i]+" Damage:"+value.StepDamage[i]);
 				String temp=value.SAStep[i];
+				attackSelect.setSelected(value.allAttack);
 				stepName.add(value.SAStep[i]);
 				stepCount.add(value.SACount[i]);
 				stepDamage.add(value.StepDamage[i]);
@@ -82,6 +86,9 @@ public class XCBVisualSpecialAttack {
 					case "SD":
 						stepShow.addElement("次元斩"+value.SACount[i]+"次，总威力"+value.StepDamage[i]);
 						break;
+					case "DL":
+						stepShow.addElement("延时"+value.SACount[i]+"单位，单机有效");
+						break;
 				}
 			}
 			setupContentTree();
@@ -102,13 +109,13 @@ public class XCBVisualSpecialAttack {
 		frmXCBVisualSA = new JFrame();
 		frmXCBVisualSA.setResizable(false);
 		frmXCBVisualSA.setTitle("XCBVisualEditor -Create SA");
-		frmXCBVisualSA.setBounds(100, 100, 472, 307);
+		frmXCBVisualSA.setBounds(100, 100, 472, 350);
 		frmXCBVisualSA.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmXCBVisualSA.getContentPane().setLayout(null);
 		
 		JTree actionTree = new JTree();
 		actionTree.setModel(actionContentTree);
-		actionTree.setBounds(27, 23, 186, 221);
+		actionTree.setBounds(27, 23, 186, 257);
 		frmXCBVisualSA.getContentPane().add(actionTree);
 		
 		JLabel lblSa = new JLabel("SA名称");
@@ -151,7 +158,7 @@ public class XCBVisualSpecialAttack {
 			public void actionPerformed(ActionEvent e) {
 				if(saStepList.getSelectedItem()==null) return;
 				int count=0,damage=0;
-				count=Integer.valueOf((JOptionPane.showInputDialog(null,"输入这一步骤攻击次数","0")));
+				count=Integer.valueOf((JOptionPane.showInputDialog(null,"输入这一步骤攻击/运行次数","0")));
 				damage=Integer.valueOf((JOptionPane.showInputDialog(null,"输入单次攻击威力","0")));
 				switch(saStepList.getSelectedIndex()) {
 					case 0:
@@ -182,6 +189,10 @@ public class XCBVisualSpecialAttack {
 						stepName.add("SD");
 						stepShow.addElement("次元斩"+count+"次，总威力"+damage);
 						break;
+					case 7:
+						stepName.add("DL");
+						stepShow.addElement("延时"+count+"单位，单机有效");
+						break;
 				}
 				stepCount.add(count);
 				stepDamage.add(damage);
@@ -189,7 +200,7 @@ public class XCBVisualSpecialAttack {
 				actionTree.setModel(actionContentTree);
 			}
 		});
-		addAction.setBounds(230, 156, 102, 35);
+		addAction.setBounds(231, 191, 102, 35);
 		frmXCBVisualSA.getContentPane().add(addAction);
 		
 		JButton delAction = new JButton("删除");
@@ -213,11 +224,11 @@ public class XCBVisualSpecialAttack {
 				}
 			}
 		});
-		delAction.setBounds(343, 156, 102, 35);
+		delAction.setBounds(343, 191, 102, 35);
 		frmXCBVisualSA.getContentPane().add(delAction);
 		
 		JLabel actionSelected = new JLabel("Not selected.");
-		actionSelected.setBounds(37, 253, 176, 15);
+		actionSelected.setBounds(27, 290, 176, 15);
 		frmXCBVisualSA.getContentPane().add(actionSelected);
 		
 		JButton submitSA = new JButton("提交SA");
@@ -236,7 +247,7 @@ public class XCBVisualSpecialAttack {
 					scontext[a]=String.valueOf(stepName.get(a));
 				}
 				int ret=jsondata.addToJson(saName.getText(),Integer.valueOf(saUuid.getText()),
-						Integer.valueOf(saCost.getText()), scontext,scount, sdamage);
+						Integer.valueOf(saCost.getText()), scontext,scount, sdamage,attackSelect.isSelected());
 				if(ret==1) {
 					JOptionPane.showMessageDialog(null, "已添加到配置中！");
 					frmXCBVisualSA.setVisible(false);
@@ -250,8 +261,12 @@ public class XCBVisualSpecialAttack {
 					JOptionPane.showMessageDialog(null, "添加失败！");
 			}
 		});
-		submitSA.setBounds(230, 201, 215, 43);
+		submitSA.setBounds(230, 237, 215, 43);
 		frmXCBVisualSA.getContentPane().add(submitSA);
+		
+		attackSelect = new JCheckBox("对中立生物造成伤害");
+		attackSelect.setBounds(230, 162, 215, 23);
+		frmXCBVisualSA.getContentPane().add(attackSelect);
 		
 		if(this.inputName!=null) {
 			externInit();

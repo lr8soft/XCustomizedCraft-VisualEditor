@@ -240,8 +240,8 @@ public class XCBVisualEditorMain {
 		btnsa_3.setBounds(355, 312, 125, 23);
 		frmXCBVisualEditorMain.getContentPane().add(btnsa_3);
 		
-		JLabel lblForXcustomizedbladeVer = new JLabel("For XCustomizedBlade VER TinyCore");
-		lblForXcustomizedbladeVer.setBounds(22, 345, 269, 15);
+		JLabel lblForXcustomizedbladeVer = new JLabel("For XCustomizedBlade VER TinyCore 1.47(1.7.10)/1.44(1.12.2)");
+		lblForXcustomizedbladeVer.setBounds(22, 345, 442, 15);
 		frmXCBVisualEditorMain.getContentPane().add(lblForXcustomizedbladeVer);
 		
 		JTree tree = new JTree();

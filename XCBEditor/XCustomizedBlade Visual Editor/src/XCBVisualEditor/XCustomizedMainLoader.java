@@ -11,7 +11,7 @@ import XCBVisualEditor.XCBVisualEditor.XCBVisualEditorMain;
 public class XCustomizedMainLoader {
 	public static XCBConfigLoad configload;
 	public static XCBVisualEditorMain vemain;
-	public final static String XCCVEVersion="v1.3Preview";
+	public final static String XCCVEVersion="v1.31";
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

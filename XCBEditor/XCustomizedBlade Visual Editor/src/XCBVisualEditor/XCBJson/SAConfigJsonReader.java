@@ -87,6 +87,12 @@ public class SAConfigJsonReader {
 					int sanum=temp.get("SANumber").getAsInt();
 					int cost=temp.get("SACost").getAsInt();
 					int count=temp.get("SACount").getAsInt();
+					boolean allAttack=false;
+					try {
+						allAttack=temp.get("PeaceSelector").getAsBoolean();
+					}catch(NullPointerException e) {
+						System.out.println("XCC-VE:Config file from old VER.");
+					}
 					JsonArray JAStep=temp.get("SAInfo").getAsJsonArray();
 					JsonArray JACount=temp.get("SAStep").getAsJsonArray();
 					JsonArray JADamage=temp.get("StepDamage").getAsJsonArray();
@@ -102,7 +108,7 @@ public class SAConfigJsonReader {
 							return null;
 						}
 					}
-					ret=new XCDJsonSAInfo(name,sanum,StepInfo,StepCount,StepDamage,StepInfo.length,cost);
+					ret=new XCDJsonSAInfo(name,sanum,StepInfo,StepCount,StepDamage,StepInfo.length,cost,allAttack);
 				}
 			}catch(NullPointerException e) {
 				continue;
@@ -121,6 +127,7 @@ public class SAConfigJsonReader {
 					temp.remove("StepDamage");temp.remove("SAStep");
 					temp.remove("BladeStandBy");temp.remove("BladeSA");
 					temp.remove("SACount");
+					try {temp.remove("PeaceSelector");}catch(Exception e) {}
 					this.jsoninfo.remove("XCustomizedSA");
 					this.jsoninfo.add("XCustomizedSA", jsondata);
 					Gson out=new Gson();
@@ -143,7 +150,7 @@ public class SAConfigJsonReader {
 		}
 		return 0;
 	}
-	public int changeToJson(String name,int num,int cost,String[] step,int[] count,int[] damage) {
+	public int changeToJson(String name,int num,int cost,String[] step,int[] count,int[] damage,boolean allAttack) {
 		System.out.println("XCC Info:Try to replace the old blade->"+name);
 		for(int i=0;i<jsondata.size();i++) {
 			JsonObject temp=jsondata.get(i).getAsJsonObject();
@@ -156,6 +163,8 @@ public class SAConfigJsonReader {
 					temp.remove("StepDamage");temp.add("StepDamage", XCBToJsonArray.IntToJsonArray(damage));
 					temp.remove("SAStep");temp.add("SAStep", XCBToJsonArray.IntToJsonArray(count));
 					temp.remove("SACount");temp.addProperty("SACount",step.length);
+					try {temp.remove("PeaceSelector");}catch(Exception e) {};
+					temp.addProperty("PeaceSelector",allAttack);
 					//this.jsondata.add(temp);
 					this.jsoninfo.remove("XCustomizedSA");
 					this.jsoninfo.add("XCustomizedSA", jsondata);
@@ -179,7 +188,7 @@ public class SAConfigJsonReader {
 		}
 		return 0;
 	}
-	public int addToJson(String name,int num,int cost,String[] step,int[] count,int[] damage) {
+	public int addToJson(String name,int num,int cost,String[] step,int[] count,int[] damage,boolean allAttack) {
 		boolean ret=isExisted(name);
 		if(!ret) {
 			JsonObject temp=new JsonObject();
@@ -205,7 +214,7 @@ public class SAConfigJsonReader {
 			}
 			return 1;
 		}else {
-			int rret=changeToJson(name,num,cost,step,count,damage);
+			int rret=changeToJson(name,num,cost,step,count,damage,allAttack);
 			return rret;
 		}
 	}

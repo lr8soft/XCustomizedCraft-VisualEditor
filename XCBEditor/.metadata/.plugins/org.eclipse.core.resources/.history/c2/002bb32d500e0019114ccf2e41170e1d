@@ -1,9 +1,0 @@
-package XCBVisualEditor.XCBJson;
-
-public class SyncJsonReader {
-	private String jsonpath;
-	private JsonObject jsondata;
-	public SyncJsonReader(String path) {
-		
-	}
-}
