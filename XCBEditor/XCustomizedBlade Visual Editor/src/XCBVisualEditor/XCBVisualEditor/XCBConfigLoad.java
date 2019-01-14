@@ -13,6 +13,7 @@ import com.google.gson.JsonSyntaxException;
 import XCBVisualEditor.XCustomizedMainLoader;
 import XCBVisualEditor.XCBJson.ConfigJsonReader;
 import XCBVisualEditor.XCBJson.SAConfigJsonReader;
+import XCBVisualEditor.XCBJson.SEConfigJsonReader;
 import XCBVisualEditor.XCBUtil.XCBFileFilter;
 
 import java.awt.BorderLayout;
@@ -72,8 +73,9 @@ public class XCBConfigLoad {
 						return;
 					}
 					SAConfigJsonReader sareader=new SAConfigJsonReader(pathField.getText());
+					SEConfigJsonReader sereader=new SEConfigJsonReader(pathField.getText());
 					if(jsonreader != null) {
-						XCustomizedMainLoader.vemain=new XCBVisualEditorMain(jsonreader,sareader);
+						XCustomizedMainLoader.vemain=new XCBVisualEditorMain(jsonreader,sareader,sereader);
 						XCustomizedMainLoader.vemain.frmXCBVisualEditorMain.setVisible(true);
 						frmXcustomizedbladeVisualeditor.setVisible(false);
 						try {

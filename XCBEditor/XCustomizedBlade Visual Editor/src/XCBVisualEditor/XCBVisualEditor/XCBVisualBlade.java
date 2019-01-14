@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
-import XCBVisualEditor.XCDJsonInfo;
+import XCBVisualEditor.XCDJsonDetailInfo;
 import XCBVisualEditor.XCBJson.ConfigJsonReader;
 import XCBVisualEditor.XCBUtil.XCBSelectBox;
 
@@ -32,19 +32,19 @@ import javax.swing.JComboBox;
 public class XCBVisualBlade {
 	private ConfigJsonReader jsondata;
 	private DefaultListModel blademenu;
-	public String bladeUuid,bladeName,bladeModel,bladeTexture;
-	public int damage,duration,sa,color=3316172;
+	public String bladeUuid,bladeName,bladeModel,bladeTexture,SEName;
+	public int damage,duration,sa,color=3316172,SELevel=15;
 	private boolean iswitched=false;
 	public JFrame frmXCBVisualBlade;
 	private JLabel ValueLabel;
-	private XCDJsonInfo bladeinfo;
+	private XCDJsonDetailInfo bladeinfo;
 	private Vector EnchantList=new Vector();
 	private Vector EnchantLevel=new Vector();
 	private DefaultListModel EnchantDLM=new DefaultListModel();
 	private String[] enchantment= {"power","unbreaking","looting","sharpness","infinity","thorns","knockback","baneOfArthropods",
 			"blastProtection","featherFalling","fireAspect","fireProtection","flame","fortune","projectileProtection","protection",
 			"punch","respiration","silkTouch","smite"};
-	public XCBVisualBlade(ConfigJsonReader data,DefaultListModel input,XCDJsonInfo info) {
+	public XCBVisualBlade(ConfigJsonReader data,DefaultListModel input,XCDJsonDetailInfo info) {
 		this.bladeinfo=info;
 		this.blademenu=input;
 		this.jsondata=data;
@@ -63,6 +63,8 @@ public class XCBVisualBlade {
 			this.damage=(int) bladeinfo.bladedamage;
 			this.iswitched=bladeinfo.iswitched;
 			this.color=bladeinfo.color;
+			this.SELevel=bladeinfo.SELevel;
+			this.SEName=bladeinfo.SEName;
 			System.out.println("XCC:Try to replace data from config.");
 		}else {
 			System.out.println("XCC:Null");
@@ -109,6 +111,7 @@ public class XCBVisualBlade {
 					add(new DefaultMutableTreeNode("贴图地址"));
 					node_1 = new DefaultMutableTreeNode("详细信息");
 						node_1.add(new DefaultMutableTreeNode("SA"));
+						node_1.add(new DefaultMutableTreeNode("SE"));
 						node_1.add(new DefaultMutableTreeNode("耐久"));
 						node_1.add(new DefaultMutableTreeNode("基础伤害"));
 						node_1.add(new DefaultMutableTreeNode("妖刀"));
@@ -151,6 +154,14 @@ public class XCBVisualBlade {
 								XCBSpecialAttackSelect saWin=new XCBSpecialAttackSelect(classTemp,sa);
 								saWin.frmXCCVESA.setVisible(true);
 								break;
+							case "SE":
+								String input=JOptionPane.showInputDialog(null,"输入SE在拔刀剑中识别名",SEName);
+								int inputLevel=Integer.valueOf(JOptionPane.showInputDialog(null,"输入使用SE最低等级",String.valueOf(SELevel)));
+								if(input!=null) {
+									SEName=input;
+									SELevel=inputLevel;
+								}
+								break;
 							case "耐久":
 								temp = JOptionPane.showInputDialog(null,"输入拔刀剑耐久",String.valueOf(duration));
 								if(temp!=null)
@@ -191,8 +202,8 @@ public class XCBVisualBlade {
 		JButton btnNewButton = new JButton("确认");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				XCDJsonInfo info=new XCDJsonInfo(sa,0,duration,color,iswitched,damage,bladeUuid,bladeName,
-						bladeModel,bladeTexture,false,null,EnchantList,EnchantLevel);
+				XCDJsonDetailInfo info=new XCDJsonDetailInfo(sa,0,duration,color,iswitched,damage,bladeUuid,bladeName,
+						bladeModel,bladeTexture,EnchantList,EnchantLevel,SEName,SELevel);
 						int ret=jsondata.addToJson(info);
 						switch(ret) {
 							case 1:
@@ -290,6 +301,9 @@ public class XCBVisualBlade {
 				break;
 			case "SA":
 				ValueLabel.setText(name+":"+String.valueOf(this.sa));
+				break;
+			case "SE":
+				ValueLabel.setText(name+":"+this.SEName);
 				break;
 			case "耐久":
 				ValueLabel.setText(name+":"+String.valueOf(this.duration));

@@ -30,7 +30,6 @@
 <fullyQualifiedTypeName name="java.awt.event.AdjustmentListener"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.XCustomizedMainLoader"/>
 <fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
-<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
 <fullyQualifiedTypeName name="java.io.FileInputStream"/>
 <fullyQualifiedTypeName name="java.io.BufferedInputStream"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.XCBUtil.XCBGetPath"/>
@@ -53,4 +52,12 @@
 <fullyQualifiedTypeName name="java.io.OutputStreamWriter"/>
 <fullyQualifiedTypeName name="java.awt.TextArea"/>
 <fullyQualifiedTypeName name="javax.swing.JTextArea"/>
+<fullyQualifiedTypeName name="javax.swing.JComponent"/>
+<fullyQualifiedTypeName name="javax.swing.JPanel"/>
+<fullyQualifiedTypeName name="java.awt.GridLayout"/>
+<fullyQualifiedTypeName name="javax.swing.SwingConstants"/>
+<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+<fullyQualifiedTypeName name="XCBVisualEditor.XCBJson.SEConfigJsonReader"/>
+<fullyQualifiedTypeName name="XCBVisualEditor.XCDJsonSEInfo"/>
+<fullyQualifiedTypeName name="XCBVisualEditor.XCDJsonDetailInfo"/>
 </qualifiedTypeNameHistroy>

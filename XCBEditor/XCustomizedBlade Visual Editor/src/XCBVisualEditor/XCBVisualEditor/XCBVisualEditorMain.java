@@ -4,20 +4,24 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import XCBVisualEditor.XCDJsonInfo;
+import XCBVisualEditor.XCDJsonDetailInfo;
 import XCBVisualEditor.XCustomizedMainLoader;
 import XCBVisualEditor.XCBJson.ConfigJsonReader;
 import XCBVisualEditor.XCBJson.SAConfigJsonReader;
+import XCBVisualEditor.XCBJson.SEConfigJsonReader;
 import XCBVisualEditor.XCBJson.SyncJsonReader;
 
 import javax.swing.JList;
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JMenu;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.Vector;
 
 import javax.swing.DefaultListModel;
@@ -27,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TreeSelectionEvent;
@@ -43,26 +48,34 @@ import com.google.gson.JsonObject;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JMenuItem;
+import java.awt.Button;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class XCBVisualEditorMain {
 	private XCBVisualEditorMain classTemp;
 	public JFrame frmXCBVisualEditorMain;
-	private JLabel ValueLabel;
 	private SyncJsonReader serverdata;
 	private ConfigJsonReader jsondata;
 	private SAConfigJsonReader sadata;
+	private SEConfigJsonReader sedata;
+//	private SEConfigJsonReader sedata;
 	private DefaultListModel BladeDLM=new DefaultListModel();
 	private DefaultListModel SADLM=new DefaultListModel();
-	
-	public XCBVisualEditorMain(ConfigJsonReader data,SAConfigJsonReader sadata) {
+	private DefaultListModel SEDLM=new DefaultListModel();
+	private JLabel ValueLabel;
+	private JList seList;
+	private JPanel SAPane,SEPane;
+	public XCBVisualEditorMain(ConfigJsonReader data,SAConfigJsonReader sadata,SEConfigJsonReader sedata) {
 		this.jsondata=data;
 		this.sadata=sadata;
+		this.sedata=sedata;
 		this.classTemp=this;
 		getInfoFromJson();
 		initialize();
 	}
 	private void getInfoFromJson() {
-		XCDJsonInfo[] info=jsondata.GetInfo();
+		XCDJsonDetailInfo[] info=jsondata.GetInfo();
 		for(int i=0;i<info.length;i++) {
 			try {
 				BladeDLM.addElement(info[i].bladename);
@@ -80,14 +93,16 @@ public class XCBVisualEditorMain {
 				}
 			}
 		}
-	}
-	private void reloadFromJson(JList bladeList,JList saList) {
-		jsondata.readFromJson();
-		BladeDLM=new DefaultListModel();
-		SADLM=new DefaultListModel();
-		getInfoFromJson();
-		bladeList.setModel(BladeDLM);
-		saList.setModel(SADLM);
+		if(sedata.willSERun) {
+			for(int j=0;j<sedata.jsondata.size();j++) {
+				try {
+					JsonObject temp=sedata.jsondata.get(j).getAsJsonObject();
+					SEDLM.addElement(temp.get("SEName").getAsString());
+				}catch(NullPointerException e) {
+					continue;
+				}
+			}
+		}
 	}
 	private void initialize() {
 	
@@ -95,38 +110,193 @@ public class XCBVisualEditorMain {
 		frmXCBVisualEditorMain.setResizable(false);
 		frmXCBVisualEditorMain.setType(Type.POPUP);
 		frmXCBVisualEditorMain.setTitle("XCustomizedCraft VisualEditor for XCustomizedBlade "+XCustomizedMainLoader.XCCVEVersion);
-		frmXCBVisualEditorMain.setBounds(100, 100, 709, 435);
+		frmXCBVisualEditorMain.setBounds(100, 100, 690, 410);
 		frmXCBVisualEditorMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmXCBVisualEditorMain.getContentPane().setLayout(null);
-		
+////////////////////////////////////////////////////Blade part init		
 		JScrollPane scrollPane=new JScrollPane();
-		scrollPane.setBounds(22, 41, 323, 122);
-		frmXCBVisualEditorMain.getContentPane().add(scrollPane);
+		scrollPane.setBounds(10, 10, 280, 252);
 		
-		JScrollPane scrollPaneSA=new JScrollPane();
-		scrollPaneSA.setBounds(22, 213, 323, 122);
-		frmXCBVisualEditorMain.getContentPane().add(scrollPaneSA);
-		
-		JList salist = new JList();
-		salist.setModel(SADLM);
-		scrollPaneSA.setViewportView(salist);
 		
 		JList bladelist = new JList();
 		bladelist.setModel(BladeDLM);
 		scrollPane.setViewportView(bladelist);
 		
-		JLabel label = new JLabel("配置内拔刀");
-		label.setFont(new Font("宋体", Font.PLAIN, 14));
-		label.setBounds(22, 10, 97, 21);
-		frmXCBVisualEditorMain.getContentPane().add(label);
+		JPanel BladePane=new JPanel();
+		BladePane.setLayout(null);
+		BladePane.add(scrollPane);
+////////////////////////////////////////////////////SE Part init	
+		JScrollPane scrollPaneSE=new JScrollPane();
+		scrollPaneSE.setBounds(10, 10, 280, 252);
 		
-		JLabel lblsa = new JLabel("配置内SA");
-		lblsa.setFont(new Font("宋体", Font.PLAIN, 14));
-		lblsa.setBounds(22, 182, 97, 21);
-		frmXCBVisualEditorMain.getContentPane().add(lblsa);
+		SEPane=new JPanel();
+		SEPane.setLayout(null);
+		SEPane.add(scrollPaneSE);
 		
-		JButton button = new JButton("删除选中");
-		button.addActionListener(new ActionListener() {
+		seList = new JList();
+		seList.setModel(SEDLM);
+		scrollPaneSE.setViewportView(seList);
+		
+		JTabbedPane XCCMenu=new JTabbedPane();
+		XCCMenu.addTab("拔刀配置", BladePane);
+		/////////////////////////////////////////////////////SA Part init
+				JScrollPane scrollPaneSA=new JScrollPane();
+				scrollPaneSA.setBounds(10, 10, 280, 252);
+				
+				SAPane=new JPanel();
+				SAPane.setLayout(null);
+				SAPane.add(scrollPaneSA);
+				
+				JList salist = new JList();
+				scrollPaneSA.setViewportView(salist);
+				salist.setModel(SADLM);
+				XCCMenu.addTab("SA特殊攻击配置", SAPane);
+				
+				JButton btnsa = new JButton("添加新SA");
+				btnsa.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						XCBVisualSpecialAttack saWindow=new XCBVisualSpecialAttack(sadata,null);
+						saWindow.frmXCBVisualSA.setVisible(true);
+					}
+				});
+				btnsa.setBounds(300, 8, 115, 23);
+				SAPane.add(btnsa);
+				
+				JButton btnsa_1 = new JButton("修改选中SA");
+				btnsa_1.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(salist.getSelectedValue()!=null) {
+							String updateName=null;
+							updateName=salist.getSelectedValue().toString();
+							System.out.println(updateName);
+							XCBVisualSpecialAttack saWindow=new XCBVisualSpecialAttack(sadata,updateName);
+							saWindow.frmXCBVisualSA.setVisible(true);
+						}else {
+							JOptionPane.showMessageDialog(null, "未选中任何SA！");
+						}
+					}
+				});
+				btnsa_1.setBounds(300, 41, 115, 23);
+				SAPane.add(btnsa_1);
+				
+				JButton btnsa_2 = new JButton("删除选中SA");
+				btnsa_2.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(salist.getSelectedValue()!=null) {
+							String delName=salist.getSelectedValue().toString();
+							int ret=JOptionPane.showConfirmDialog(null, "你确定删除选中SA么","XCC VisualEditor",JOptionPane.YES_NO_CANCEL_OPTION);
+							if(ret==JOptionPane.YES_OPTION) {
+								int r=sadata.deleteToJson(delName);
+								if(r==1) {
+									JOptionPane.showMessageDialog(null, "SA已删除！");
+								}else {
+									JOptionPane.showMessageDialog(null, "删除失败！");
+								}
+							}						
+						}else {
+							JOptionPane.showMessageDialog(null, "未选中SA！");
+						}
+					}
+				});
+				btnsa_2.setBounds(300, 74, 115, 23);
+				SAPane.add(btnsa_2);
+				
+				JButton btnsa_3 = new JButton("刷新SA列表");
+				btnsa_3.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						reloadFromJson(bladelist,salist);
+					}
+				});
+				btnsa_3.setBounds(300, 107, 115, 23);
+				SAPane.add(btnsa_3);
+		XCCMenu.addTab("SE特殊攻击配置", SEPane);
+		
+		JButton btnSE1 = new JButton("添加SE");
+		btnSE1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				XCBVisualSpecialEffect seWindow=new XCBVisualSpecialEffect(sedata,null);
+				seWindow.frmXCBVisualSE.setVisible(true);
+			}
+		});
+		btnSE1.setBounds(300, 8, 115, 23);
+		SEPane.add(btnSE1);
+		
+		JButton btnSE2 = new JButton("修改选中SE");
+		btnSE2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(seList.getSelectedValue()!=null) {
+					String updateName=null;
+					updateName=seList.getSelectedValue().toString();
+					System.out.println(updateName);
+					XCBVisualSpecialEffect seWindow=new XCBVisualSpecialEffect(sedata,updateName);
+					seWindow.frmXCBVisualSE.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "未选中任何SE！");
+				}
+			}
+		});
+		btnSE2.setBounds(300, 41, 115, 23);
+		SEPane.add(btnSE2);
+		
+		JButton btnSE3 = new JButton("删除选中SE");
+		btnSE3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(seList.getSelectedValue()!=null) {
+					String delName=seList.getSelectedValue().toString();
+					int ret=JOptionPane.showConfirmDialog(null, "你确定删除选中SE么","XCC VisualEditor",JOptionPane.YES_NO_CANCEL_OPTION);
+					if(ret==JOptionPane.YES_OPTION) {
+						int r=sedata.deleteToJson(delName);
+						if(r==1) {
+							JOptionPane.showMessageDialog(null, "SE已删除！");
+						}else {
+							JOptionPane.showMessageDialog(null, "删除失败！");
+						}
+					}						
+				}else {
+					JOptionPane.showMessageDialog(null, "未选中SE！");
+				}
+			}
+		});
+		btnSE3.setBounds(300, 74, 115, 23);
+		SEPane.add(btnSE3);
+		
+		JButton btnSE4 = new JButton("刷新SE列表");
+		btnSE4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				reloadFromJson(bladelist,salist);
+			}
+		});
+		btnSE4.setBounds(299, 107, 115, 23);
+		SEPane.add(btnSE4);
+		
+		JButton btnNewButton = new JButton("修改选中");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(bladelist.getSelectedValue()!=null) {
+					String sendName=bladelist.getSelectedValue().toString();
+					XCDJsonDetailInfo bladeInfo=jsondata.GetBladeInfo(sendName);
+					XCBVisualBlade addWindow=new XCBVisualBlade(jsondata,BladeDLM,bladeInfo);
+					addWindow.frmXCBVisualBlade.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "未选中任何拔刀！");
+				}
+			}
+		});
+		btnNewButton.setBounds(300, 8, 115, 23);
+		BladePane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("添加新拔刀");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				XCBVisualBlade addWindow=new XCBVisualBlade(jsondata,BladeDLM,null);
+				addWindow.frmXCBVisualBlade.setVisible(true);
+			}
+		});
+		btnNewButton_1.setBounds(300, 41, 115, 23);
+		BladePane.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("删除选中");
+		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(bladelist.getSelectedValue()!=null) {
 					String delName=bladelist.getSelectedValue().toString();
@@ -144,113 +314,32 @@ public class XCBVisualEditorMain {
 				}
 			}
 		});
-		button.setBounds(355, 107, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(button);
+		btnNewButton_2.setBounds(300, 74, 115, 23);
+		BladePane.add(btnNewButton_2);
 		
-		JButton btnNewButton = new JButton("修改选中");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(bladelist.getSelectedValue()!=null) {
-					String sendName=bladelist.getSelectedValue().toString();
-					XCDJsonInfo bladeInfo=jsondata.GetBladeInfo(sendName);
-					XCBVisualBlade addWindow=new XCBVisualBlade(jsondata,BladeDLM,bladeInfo);
-					addWindow.frmXCBVisualBlade.setVisible(true);
-				}else {
-					JOptionPane.showMessageDialog(null, "未选中任何拔刀！");
-				}
-			}
-		});
-		btnNewButton.setBounds(355, 41, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("添加新拔刀");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				XCBVisualBlade addWindow=new XCBVisualBlade(jsondata,BladeDLM,null);
-				addWindow.frmXCBVisualBlade.setVisible(true);
-			}
-		});
-		btnNewButton_1.setBounds(355, 74, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("刷新拔刀列表");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton btnNewButton_3 = new JButton("刷新拔刀列表");
+		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reloadFromJson(bladelist,salist);
 			}
 		});
-		btnNewButton_2.setBounds(355, 140, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(btnNewButton_2);
-		
-		JButton btnsa = new JButton("添加新SA");
-		btnsa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				XCBVisualSpecialAttack saWindow=new XCBVisualSpecialAttack(sadata,null);
-				saWindow.frmXCBVisualSA.setVisible(true);
-			}
-		});
-		btnsa.setBounds(355, 213, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(btnsa);
-		
-		JButton btnsa_1 = new JButton("修改选中SA");
-		btnsa_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(salist.getSelectedValue()!=null) {
-					String updateName=null;
-					updateName=salist.getSelectedValue().toString();
-					System.out.println(updateName);
-					XCBVisualSpecialAttack saWindow=new XCBVisualSpecialAttack(sadata,updateName);
-					saWindow.frmXCBVisualSA.setVisible(true);
-				}else {
-					JOptionPane.showMessageDialog(null, "未选中任何SA！");
-				}
-			}
-		});
-		btnsa_1.setBounds(355, 246, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(btnsa_1);
-		
-		JButton btnsa_2 = new JButton("删除选中SA");
-		btnsa_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(salist.getSelectedValue()!=null) {
-					String delName=salist.getSelectedValue().toString();
-					int ret=JOptionPane.showConfirmDialog(null, "你确定删除选中SA么","XCC VisualEditor",JOptionPane.YES_NO_CANCEL_OPTION);
-					if(ret==JOptionPane.YES_OPTION) {
-						int r=sadata.deleteToJson(delName);
-						if(r==1) {
-							JOptionPane.showMessageDialog(null, "SA已删除！");
-						}else {
-							JOptionPane.showMessageDialog(null, "删除失败！");
-						}
-					}						
-				}else {
-					JOptionPane.showMessageDialog(null, "未选中SA！");
-				}
-			}
-		});
-		btnsa_2.setBounds(355, 279, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(btnsa_2);
-		
-		JButton btnsa_3 = new JButton("刷新SA列表");
-		btnsa_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				reloadFromJson(bladelist,salist);
-			}
-		});
-		btnsa_3.setBounds(355, 312, 125, 23);
-		frmXCBVisualEditorMain.getContentPane().add(btnsa_3);
-		
-		JLabel lblForXcustomizedbladeVer = new JLabel("For XCustomizedBlade VER TinyCore 1.47(1.7.10)/1.44(1.12.2)");
-		lblForXcustomizedbladeVer.setBounds(22, 345, 442, 15);
-		frmXCBVisualEditorMain.getContentPane().add(lblForXcustomizedbladeVer);
-		
+		btnNewButton_3.setBounds(300, 107, 115, 23);
+		BladePane.add(btnNewButton_3);
+	/*	XCCMenu.addTab("拔刀配置", createTextPanel("拔刀配置"));
+		XCCMenu.addTab("SA配置", createTextPanel("SA配置"));
+		XCCMenu.addTab("SE配置", createTextPanel("SE配置"));*/
+		XCCMenu.setSize(439, 301);
+		XCCMenu.setLocation(10, 10);
+		frmXCBVisualEditorMain.getContentPane().add(XCCMenu);
 		JTree tree = new JTree();
+		tree.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("配置信息") {
 				{
 					DefaultMutableTreeNode node_1;
 					add(new DefaultMutableTreeNode("拔刀数量"));
 					add(new DefaultMutableTreeNode("SA数量"));
+					add(new DefaultMutableTreeNode("SE数量"));
 					add(new DefaultMutableTreeNode("配置版本"));
 					node_1 = new DefaultMutableTreeNode("服务器配置");
 						node_1.add(new DefaultMutableTreeNode("网络地址"));
@@ -313,12 +402,16 @@ public class XCBVisualEditorMain {
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 		});
-		tree.setBounds(497, 41, 176, 271);
+		tree.setBounds(459, 13, 205, 298);
 		frmXCBVisualEditorMain.getContentPane().add(tree);
 		
-		ValueLabel = new JLabel("Not selected");
-		ValueLabel.setBounds(507, 320, 139, 15);
+		ValueLabel = new JLabel("Not selected.");
+		ValueLabel.setBounds(459, 321, 206, 15);
 		frmXCBVisualEditorMain.getContentPane().add(ValueLabel);
+		
+		JLabel xccInfo = new JLabel("For XCustomizedBlade TinyCore 1.51 (1.7.10/1.12.2)");
+		xccInfo.setBounds(20, 321, 429, 15);
+		frmXCBVisualEditorMain.getContentPane().add(xccInfo);
 		
 		JMenu mnNewMenu = new JMenu("配置文件...");
 		mnNewMenu.setBounds(0, 0, 111, 22);
@@ -369,6 +462,23 @@ public class XCBVisualEditorMain {
 		});
 		mnNewMenu_2.add(mntmNewMenuItem);
 		frmXCBVisualEditorMain.setJMenuBar(jMenuBar);
+		
+		{
+			if(!this.sadata.willSARun) {
+				btnsa.setEnabled(false);
+				btnsa_1.setEnabled(false);
+				btnsa_2.setEnabled(false);
+				btnsa_3.setEnabled(false);
+				salist.setEnabled(false);
+			}
+			if(!this.sedata.willSERun) {
+				btnSE1.setEnabled(false);
+				btnSE2.setEnabled(false);
+				btnSE3.setEnabled(false);
+				btnSE4.setEnabled(false);
+				seList.setEnabled(false);
+			}
+		}
 	}
 	public void workToLabel(String name) {
 		this.serverdata=new SyncJsonReader(this.jsondata.path);
@@ -378,6 +488,9 @@ public class XCBVisualEditorMain {
 				break;
 			case "SA数量":
 				ValueLabel.setText(name+":"+this.sadata.GetSACount());
+				break;
+			case "SE数量":
+				ValueLabel.setText(name+":"+this.sedata.GetSECount());
 				break;
 			case "配置版本":
 				ValueLabel.setText(name+":"+this.jsondata.GetConfigVersion());
@@ -396,4 +509,14 @@ public class XCBVisualEditorMain {
 				break;
 		}
 	}	
+	private void reloadFromJson(JList bladeList,JList saList) {
+		jsondata.readFromJson();
+		BladeDLM=new DefaultListModel();
+		SADLM=new DefaultListModel();
+		SEDLM=new DefaultListModel();
+		getInfoFromJson();
+		bladeList.setModel(BladeDLM);
+		saList.setModel(SADLM);
+		seList.setModel(SEDLM);
+	}
 }

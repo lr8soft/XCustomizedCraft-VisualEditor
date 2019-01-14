@@ -17,7 +17,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
-import XCBVisualEditor.XCDJsonInfo;
+import XCBVisualEditor.XCDJsonDetailInfo;
 import XCBVisualEditor.XCBUtil.XCBGetPath;
 import XCBVisualEditor.XCBUtil.XCBToJsonArray;
 public class ConfigJsonReader {
@@ -25,71 +25,12 @@ public class ConfigJsonReader {
 	public JsonObject json;private JsonObject serverdata;
 	public String path;
 	public JsonArray jsondata;
-	public boolean CustomRecipe;
 	public int datalen;
 	public ConfigJsonReader(String inpath) {
 		this.path=inpath;
-		this.CustomRecipe=false;
 		this.datalen=0;
 		this.json=null;
 		this.serverdata=null;
-	}
-	public void itemInit() {
-		this.datalen=jsondata.size();
-		int i,sa = 1,standby=1,duration=200,color=16744192;boolean iswithed=false;JsonArray Enchantment=null,recipeItems=null,recipeSource=null;
-		float bladedamage=10;String bladename=null,bladeModel=null,bladeTexture=null,showName=null;
-		String[] recipeName= new String[10];
-		String[] recipeSourceName= new String[9];
-		for(i=0;i<jsondata.size();i++) {
-			JsonObject temp=jsondata.get(i).getAsJsonObject();
-			try {
-				bladename=temp.get("BladeName").getAsString();
-				showName=temp.get("BladeShowName").getAsString();
-				bladeModel=temp.get("BladeModel").getAsString();
-				bladeTexture=temp.get("BladeTexture").getAsString();
-			}catch(NullPointerException e) {
-				continue;
-			}
-			try {
-				sa=temp.get("BladeSA").getAsInt();
-				standby=temp.get("BladeStandBy").getAsInt();
-				duration=temp.get("BladeDuration").getAsInt();
-				color=temp.get("SwordColor").getAsInt();
-				iswithed=temp.get("BladeWitched").getAsBoolean();
-				bladedamage=temp.get("BladeDamge").getAsFloat();
-			}catch(NullPointerException e) {}
-			try {
-				Enchantment=temp.get("Enchantment").getAsJsonArray();
-			}catch(NullPointerException e) {
-				System.out.println("XCC Warning:"+bladename+":"+showName+" haven\'t enchantment.");
-			}
-			if(this.CustomRecipe==true) {
-				System.out.println("XCC Info:Using custom recipe");
-				try {
-					recipeItems=temp.get("BladeRecipe").getAsJsonArray();
-					recipeSource=temp.get("RecipeResource").getAsJsonArray();
-				}catch(NullPointerException e) {
-					System.out.println("XCC Info:"+bladename+":"+showName+" haven\'t recipe.");
-					this.CustomRecipe=false;
-				}
-				for(int j=0;j<10;j++) {
-					try {
-						if(!recipeItems.get(j).isJsonNull()) {
-							recipeName[j]=recipeItems.get(j).getAsString();
-							if(j>0) {
-								if(!recipeSource.get(j-1).isJsonNull())
-									recipeSourceName[j-1]=recipeItems.get(j-1).getAsString();
-							}
-						}
-					}catch(NullPointerException e) {
-						continue;
-					}
-				}
-			}
-			if(bladename==null||bladeModel==null||bladeTexture==null||showName==null) 
-				continue;
-		}
-		
 	}
 	public int changeTinyCore(boolean sync) {
 		try {
@@ -142,10 +83,11 @@ public class ConfigJsonReader {
 		}
 		return ret;
 	}
-	public XCDJsonInfo GetBladeInfo(String name) {
-		XCDJsonInfo ret=null;
+	public XCDJsonDetailInfo GetBladeInfo(String name) {
+		XCDJsonDetailInfo ret=null;
 		if(name==null) return ret;
-		int sa = 0,standby=0,duration=200,color=3316172;boolean iswithed=false;JsonArray Enchantment=null,recipeItems=null;
+		String SEName=null;
+		int sa = 0,standby=0,duration=200,color=3316172,SELevel;boolean iswithed=false;JsonArray Enchantment=null,recipeItems=null;
 		float bladedamage=10;String bladename=null,bladeModel=null,bladeTexture=null,showName=null;String[] recipeName= new String[11];
 		for(int i=0;i<jsondata.size();i++) {
 			JsonObject temp=jsondata.get(i).getAsJsonObject();
@@ -168,9 +110,17 @@ public class ConfigJsonReader {
 					try {
 						Enchantment=temp.get("Enchantment").getAsJsonArray();
 					}catch(NullPointerException e) {}
-					ret=new XCDJsonInfo(sa,standby,duration,color,
-						iswithed,bladedamage,bladename,showName,bladeModel,bladeTexture,CustomRecipe,recipeName,
-						XCBToJsonArray.JsonArrayToVector(Enchantment,true),XCBToJsonArray.JsonArrayToVector(Enchantment,false));
+					try {
+						SELevel=temp.get("SELevel").getAsInt();
+						SEName=temp.get("BladeSE").getAsString();
+					}catch(NullPointerException e) {
+						SELevel=0;SEName=null;
+						System.out.println("XCustomizedBlade Warning:"+bladename+":"+showName+" haven\'t SE.");
+					}
+					ret=new XCDJsonDetailInfo(sa,standby,duration,color,
+						iswithed,bladedamage,bladename,showName,bladeModel,bladeTexture,
+						XCBToJsonArray.JsonArrayToVector(Enchantment,true),XCBToJsonArray.JsonArrayToVector(Enchantment,false),
+						SEName,SELevel);
 				}
 			}catch(NullPointerException error) {
 				continue;
@@ -178,11 +128,12 @@ public class ConfigJsonReader {
 		}
 		return ret;
 	}
-	public XCDJsonInfo[] GetInfo() {
-		XCDJsonInfo[] info = new XCDJsonInfo[jsondata.size()];
+	public XCDJsonDetailInfo[] GetInfo() {
+		XCDJsonDetailInfo[] info = new XCDJsonDetailInfo[jsondata.size()];
 		this.datalen=jsondata.size();
-		int i,sa = 1,standby=1,duration=200,color=16744192;boolean iswithed=false;JsonArray Enchantment=null,recipeItems=null;
-		float bladedamage=10;String bladename=null,bladeModel=null,bladeTexture=null,showName=null;String[] recipeName= new String[11];
+		String SEName=null;
+		int i,sa = 1,standby=1,duration=200,color=16744192,SELevel=10;boolean iswithed=false;JsonArray Enchantment=null;
+		float bladedamage=10;String bladename=null,bladeModel=null,bladeTexture=null,showName=null;
 		for(i=0;i<jsondata.size();i++) {
 			JsonObject temp=jsondata.get(i).getAsJsonObject();
 			try {
@@ -211,26 +162,17 @@ public class ConfigJsonReader {
 			}catch(NullPointerException e) {
 				System.out.println("XCustomizedBlade Info:"+bladename+":"+showName+" haven\'t enchantment.");
 			}
-			if(this.CustomRecipe==true) {
-				System.out.println("XCustomizedBlade Info:Using custom recipe");
-				try {
-					recipeItems=temp.get("BladeRecipe").getAsJsonArray();
-				}catch(NullPointerException e) {
-					System.out.println("XCustomizedBlade Warning:"+bladename+":"+showName+" haven\'t recipe.");
-					this.CustomRecipe=false;
-				}
-				for(int j=0;j<10;j++) {
-					try {
-						if(recipeItems.get(j).isJsonNull()==false)
-							recipeName[j]=recipeItems.get(j).getAsString();
-					}catch(NullPointerException e) {
-						continue;
-					}
-				}
+			try {
+				SELevel=temp.get("SELevel").getAsInt();
+				SEName=temp.get("BladeSE").getAsString();
+			}catch(NullPointerException e) {
+				SELevel=0;SEName=null;
+				System.out.println("XCustomizedBlade Warning:"+bladename+":"+showName+" haven\'t SE.");
 			}
-				info[i]=new XCDJsonInfo(sa,standby,duration,color,
-						iswithed,bladedamage,bladename,showName,bladeModel,bladeTexture,CustomRecipe,recipeName,
-						XCBToJsonArray.JsonArrayToVector(Enchantment,true),XCBToJsonArray.JsonArrayToVector(Enchantment,false));
+				info[i]=new XCDJsonDetailInfo(sa,standby,duration,color,
+						iswithed,bladedamage,bladename,showName,bladeModel,bladeTexture,
+						XCBToJsonArray.JsonArrayToVector(Enchantment,true),XCBToJsonArray.JsonArrayToVector(Enchantment,false)
+						,SEName,SELevel);
 		}
 		return info;
 		
@@ -262,7 +204,6 @@ public class ConfigJsonReader {
 					}
 				}
 				jsondata=json.get("XCustomizedBladeConfig").getAsJsonArray();
-				CustomRecipe=json.get("CustomizedRecipe").getAsBoolean();
 				return 1;
 			} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
 				e.printStackTrace();
@@ -277,7 +218,7 @@ public class ConfigJsonReader {
 				break;
 		}
 	}
-	public void changeToJson(XCDJsonInfo info,int datalen) {
+	public void changeToJson(XCDJsonDetailInfo info,int datalen) {
 		System.out.println("XCC Info:Try to replace the old blade->"+info.bladename);
 		for(int i=0;i<datalen;i++) {
 			JsonObject temp=jsondata.get(i).getAsJsonObject();
@@ -293,6 +234,12 @@ public class ConfigJsonReader {
 					temp.remove("BladeSA");temp.addProperty("BladeSA", info.sa);
 					temp.remove("SwordColor");temp.addProperty("SwordColor",info.color);
 					try {temp.remove("Enchantment");}catch(Exception e) {}
+					try {
+						temp.remove("BladeSE");
+						temp.remove("SELevel");
+					}catch(Exception e) {}
+					temp.addProperty("BladeSE", info.SEName);
+					temp.addProperty("SELevel", info.SELevel);
 					temp.add("Enchantment",XCBToJsonArray.VectorToJsonArray(info.EnchantName, info.EnchantLevel));
 					//this.jsondata.add(temp);
 				//	this.json.add("XCustomizedBladeConfig", jsondata);
@@ -329,7 +276,7 @@ public class ConfigJsonReader {
 		}
 		return false;
 	}
-	public int addToJson(XCDJsonInfo info) {
+	public int addToJson(XCDJsonDetailInfo info) {
 		if(info.bladename==null||info.showName==null||this.json==null||info.bladeModel==null||info.bladeTexture==null) return 0;
 		boolean isexisted=isExisted(info.bladename);
 		System.out.println("XCC:Is blade existed?"+isexisted);
@@ -347,6 +294,8 @@ public class ConfigJsonReader {
 			temp.addProperty("BladeWitched",info.iswitched);
 			temp.addProperty("BladeStandBy",info.standby);
 			temp.addProperty("BladeSA", info.sa);
+			temp.addProperty("SELevel",info.SELevel);
+			temp.addProperty("BladeSE",info.SEName);
 			temp.addProperty("SwordColor",info.color);
 			JsonArray ret=XCBToJsonArray.VectorToJsonArray(info.EnchantName, info.EnchantLevel);
 			if(ret!=null)temp.add("Enchantment",ret);

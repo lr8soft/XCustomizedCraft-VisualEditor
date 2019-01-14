@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -36,6 +38,7 @@ public class SAConfigJsonReader {
 				if(jsoninfo.get("XCustomizedBladeVER").getAsDouble()>=1.40) {
 					jsondata=jsoninfo.get("XCustomizedSA").getAsJsonArray();
 				}else {
+					JOptionPane.showMessageDialog(null, "配置文件版本低于1.40，自定义SA将不会被加载");
 					this.willSARun=false;
 				}
 			}catch(Exception e) {this.willSARun=false;}
@@ -67,8 +70,6 @@ public class SAConfigJsonReader {
 			try {
 				temp.get("SAName").getAsString();
 				temp.get("SANumber").getAsString();
-				temp.get("SACost").getAsString();
-				temp.get("SACount").getAsString();
 				ret++;
 			}catch(NullPointerException error) {
 				continue;
