@@ -72,7 +72,7 @@ public class XCBAbout {
 		lblNewLabel.setBounds(20, 45, 159, 15);
 		frmXcustomizedcraftVisualeditorFor.getContentPane().add(lblNewLabel);
 		
-		JLabel lblCopyrightByLtlrsoft = new JLabel(String.format("CopyRight by LT_lrsoft,2014~%s",yearFormat.format(getDate)));
+		JLabel lblCopyrightByLtlrsoft = new JLabel("CopyRight by LT_lrsoft,2014~2019");
 		lblCopyrightByLtlrsoft.setBounds(20, 241, 229, 15);
 		frmXcustomizedcraftVisualeditorFor.getContentPane().add(lblCopyrightByLtlrsoft);
 		

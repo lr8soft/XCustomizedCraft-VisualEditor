@@ -125,8 +125,9 @@ public class XCBVisualSpecialAttack {
 		frmXCBVisualSA.getContentPane().add(scrollPane);
 		
 		JTree actionTree = new JTree();
-		scrollPane.setViewportView(actionTree);
 		actionTree.setModel(actionContentTree);
+		actionTree.setBounds(164, 64, 186, 257);
+		frmXCBVisualSA.getContentPane().add(actionTree);
 		
 		JLabel lblSa = new JLabel("SA名称");
 		lblSa.setBounds(230, 24, 54, 15);

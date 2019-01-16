@@ -111,12 +111,13 @@ public class XCBVisualSpecialEffect {
 		frmXCBVisualSE.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane=new JScrollPane();
-		scrollPane.setBounds(22, 24, 186, 238);
+		scrollPane.setBounds(202, 44, 186, 95);
 		frmXCBVisualSE.getContentPane().add(scrollPane);
 		
 		JTree actionTree = new JTree();
-		scrollPane.setViewportView(actionTree);
 		actionTree.setModel(actionContentTree);
+		actionTree.setBounds(59, 77, 186, 238);
+		frmXCBVisualSE.getContentPane().add(actionTree);
 		
 		JLabel lblSa = new JLabel("SE名称");
 		lblSa.setBounds(230, 24, 54, 15);

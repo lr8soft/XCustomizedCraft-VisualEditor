@@ -11,7 +11,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -110,13 +109,10 @@ public class XCBVisualSpecialEffect {
 		frmXCBVisualSE.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmXCBVisualSE.getContentPane().setLayout(null);
 		
-		JScrollPane scrollPane=new JScrollPane();
-		scrollPane.setBounds(22, 24, 186, 238);
-		frmXCBVisualSE.getContentPane().add(scrollPane);
-		
 		JTree actionTree = new JTree();
-		scrollPane.setViewportView(actionTree);
 		actionTree.setModel(actionContentTree);
+		actionTree.setBounds(27, 23, 186, 238);
+		frmXCBVisualSE.getContentPane().add(actionTree);
 		
 		JLabel lblSa = new JLabel("SE名称");
 		lblSa.setBounds(230, 24, 54, 15);

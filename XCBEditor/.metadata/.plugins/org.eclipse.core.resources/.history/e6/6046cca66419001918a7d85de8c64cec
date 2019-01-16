@@ -111,7 +111,7 @@ public class XCBVisualSpecialEffect {
 		frmXCBVisualSE.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane=new JScrollPane();
-		scrollPane.setBounds(22, 24, 186, 238);
+		scrollPane.setBounds(22, 24, 180, 238);
 		frmXCBVisualSE.getContentPane().add(scrollPane);
 		
 		JTree actionTree = new JTree();

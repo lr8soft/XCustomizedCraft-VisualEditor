@@ -11,7 +11,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -48,46 +47,41 @@ public class XCBVisualSpecialEffect {
 	private void externInit() {
 		if(this.inputName!=null) {
 			XCDJsonSEInfo value=jsondata.GetInfo(this.inputName);
-			try {
-				this.seName.setText(value.SEName);
-				this.seCost.setText(String.valueOf(value.SECost));
-				this.seLevel.setText(String.valueOf(value.SELevel));
-				for(int i=0;i<value.SEStep.length;i++) {
-					String temp=value.SEStep[i];
-					stepName.add(value.SEStep[i]);
-					stepCount.add(value.SERuntime[i]);
-					stepDamage.add(value.SEDamage[i]);
-					switch(temp) {
-						case "PS":
-							stepShow.addElement("幻影剑 "+value.SERuntime[i]+"次，单次威力"+value.SEDamage[i]);
-							break;
-						case "SE":
-							stepShow.addElement("终焉樱 "+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
-							break;
-						case "LN":
-							stepShow.addElement("雷电"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
-							break;
-						case "MB":
-							stepShow.addElement("快速两连斩"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
-							break;
-						case "SP":
-							stepShow.addElement("平突"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
-							break;
-						case "EP":
-							stepShow.addElement("爆炸"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
-							break;
-						case "SD":
-							stepShow.addElement("次元斩"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
-							break;
-						case "PE":
-							stepShow.addElement("药水编号"+value.SERuntime[i]+"，总时间"+value.SEDamage[i]);
-							break;
-					}
+			this.seName.setText(value.SEName);
+			this.seCost.setText(String.valueOf(value.SECost));
+			this.seLevel.setText(String.valueOf(value.SELevel));
+			for(int i=0;i<value.SEStep.length;i++) {
+				String temp=value.SEStep[i];
+				stepName.add(value.SEStep[i]);
+				stepCount.add(value.SERuntime[i]);
+				stepDamage.add(value.SEDamage[i]);
+				switch(temp) {
+					case "PS":
+						stepShow.addElement("幻影剑 "+value.SERuntime[i]+"次，单次威力"+value.SEDamage[i]);
+						break;
+					case "SE":
+						stepShow.addElement("终焉樱 "+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
+						break;
+					case "LN":
+						stepShow.addElement("雷电"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
+						break;
+					case "MB":
+						stepShow.addElement("快速两连斩"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
+						break;
+					case "SP":
+						stepShow.addElement("平突"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
+						break;
+					case "EP":
+						stepShow.addElement("爆炸"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
+						break;
+					case "SD":
+						stepShow.addElement("次元斩"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
+						break;
+					case "PE":
+						stepShow.addElement("药水编号"+value.SERuntime[i]+"，总时间"+value.SEDamage[i]);
+						break;
 				}
-			}catch(NullPointerException error) {
-				JOptionPane.showMessageDialog(null, "从配置文件读取"+this.inputName+"失败！\n"+error.getMessage());
 			}
-			
 			setupContentTree();
 		}
 	}
@@ -110,13 +104,10 @@ public class XCBVisualSpecialEffect {
 		frmXCBVisualSE.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmXCBVisualSE.getContentPane().setLayout(null);
 		
-		JScrollPane scrollPane=new JScrollPane();
-		scrollPane.setBounds(22, 24, 186, 238);
-		frmXCBVisualSE.getContentPane().add(scrollPane);
-		
 		JTree actionTree = new JTree();
-		scrollPane.setViewportView(actionTree);
 		actionTree.setModel(actionContentTree);
+		actionTree.setBounds(27, 23, 186, 238);
+		frmXCBVisualSE.getContentPane().add(actionTree);
 		
 		JLabel lblSa = new JLabel("SE名称");
 		lblSa.setBounds(230, 24, 54, 15);

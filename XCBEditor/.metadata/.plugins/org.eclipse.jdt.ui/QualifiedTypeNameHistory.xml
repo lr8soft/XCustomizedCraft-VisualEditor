@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="net.lrsoft.xcustomizedblade.XCBSpecialAttack.SAJsonReader"/>
-<fullyQualifiedTypeName name="XCBUtil.XCBHyperLink"/>
-<fullyQualifiedTypeName name="XCBUtil.XCBListInfo"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.XCBUtil.XCBListInfo"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.XCBSpecialAttack.SAJsonReader"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.InfoShow"/>
@@ -60,4 +57,7 @@
 <fullyQualifiedTypeName name="XCBVisualEditor.XCBJson.SEConfigJsonReader"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.XCDJsonSEInfo"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.XCDJsonDetailInfo"/>
+<fullyQualifiedTypeName name="java.awt.Component"/>
+<fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
 </qualifiedTypeNameHistroy>

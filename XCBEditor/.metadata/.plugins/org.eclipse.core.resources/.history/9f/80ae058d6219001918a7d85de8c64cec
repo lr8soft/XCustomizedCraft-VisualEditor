@@ -5,11 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-
 import javax.swing.JComboBox;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
@@ -96,7 +93,7 @@ public class XCBVisualSpecialAttack {
 					}
 				}
 			}catch(NullPointerException error) {
-				JOptionPane.showMessageDialog(null, "从配置文件读取"+this.inputName+"失败！\n"+error.getMessage());
+				JOptionPane.showMessageDialog(null, "从配置文件读取"+this.inputName+"失败！");
 			}
 			setupContentTree();
 		}
@@ -120,13 +117,10 @@ public class XCBVisualSpecialAttack {
 		frmXCBVisualSA.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmXCBVisualSA.getContentPane().setLayout(null);
 		
-		JScrollPane scrollPane=new JScrollPane();
-		scrollPane.setBounds(22, 24, 186, 257);
-		frmXCBVisualSA.getContentPane().add(scrollPane);
-		
 		JTree actionTree = new JTree();
-		scrollPane.setViewportView(actionTree);
 		actionTree.setModel(actionContentTree);
+		actionTree.setBounds(27, 23, 186, 257);
+		frmXCBVisualSA.getContentPane().add(actionTree);
 		
 		JLabel lblSa = new JLabel("SA名称");
 		lblSa.setBounds(230, 24, 54, 15);
