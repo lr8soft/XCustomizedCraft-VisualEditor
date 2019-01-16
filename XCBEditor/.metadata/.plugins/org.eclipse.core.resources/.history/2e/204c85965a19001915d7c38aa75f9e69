@@ -42,7 +42,7 @@ public class SAConfigJsonReader {
 					this.willSARun=false;
 				}
 			}catch(Exception e) {
-				JOptionPane.showMessageDialog(null, "读取配置文件时发生错误！\n"+e.getMessage());
+				JOptionPane.showMessageDialog(null, "读取配置文件时发生错误：\n"+e.getMessage());
 				this.willSARun=false;
 			}
 		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {

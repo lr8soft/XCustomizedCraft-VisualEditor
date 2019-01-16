@@ -52,7 +52,7 @@ public class SEConfigJsonReader {
 				this.willSERun=false;
 			}
 		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
-			JOptionPane.showMessageDialog(null, "配置文件读取失败！\n"+e.getMessage());
+			System.out.println("XCustomizedSE:Fail to load from config.");
 			this.willSERun=false;
 		}
 	}

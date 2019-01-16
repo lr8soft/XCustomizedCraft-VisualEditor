@@ -78,7 +78,7 @@ public class XCBVisualSpecialEffect {
 						stepShow.addElement("次元斩"+value.SERuntime[i]+"次，总威力"+value.SEDamage[i]);
 						break;
 					case "PE":
-						stepShow.addElement("药水编号"+value.SERuntime[i]+"，总时间"+value.SEDamage[i]);
+						stepShow.addElement("药水效果XCB编号"+value.SERuntime[i]+"，总时间"+value.SEDamage[i]);
 						break;
 				}
 			}
@@ -100,7 +100,7 @@ public class XCBVisualSpecialEffect {
 		frmXCBVisualSE = new JFrame();
 		frmXCBVisualSE.setResizable(false);
 		frmXCBVisualSE.setTitle("XCBVisualEditor -Create SE");
-		frmXCBVisualSE.setBounds(100, 100, 472, 320);
+		frmXCBVisualSE.setBounds(100, 100, 472, 330);
 		frmXCBVisualSE.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmXCBVisualSE.getContentPane().setLayout(null);
 		
@@ -173,7 +173,7 @@ public class XCBVisualSpecialEffect {
 						break;
 					case 7:
 						stepName.add("PE");
-						stepShow.addElement("药水编号"+count+",持续时间"+damage);
+						stepShow.addElement("药水效果XCB编号"+count+",持续时间"+damage);
 						break;
 				}
 				stepCount.add(count);
@@ -208,6 +208,10 @@ public class XCBVisualSpecialEffect {
 		});
 		delAction.setBounds(343, 175, 102, 37);
 		frmXCBVisualSE.getContentPane().add(delAction);
+		
+		JLabel actionSelected = new JLabel("Not selected.");
+		actionSelected.setBounds(27, 271, 176, 15);
+		frmXCBVisualSE.getContentPane().add(actionSelected);
 		
 		JButton submitSA = new JButton("提交SE");
 		submitSA.addActionListener(new ActionListener() {

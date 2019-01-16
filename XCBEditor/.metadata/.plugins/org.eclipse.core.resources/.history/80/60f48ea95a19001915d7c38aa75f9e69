@@ -51,6 +51,7 @@ public class SAConfigJsonReader {
 		}
 	}
 	public boolean isExisted(String name) {
+		if(!this.willSARun) return;
 		for(int i=0;i<jsondata.size();i++) {
 			JsonObject temp=jsondata.get(i).getAsJsonObject();
 			try {

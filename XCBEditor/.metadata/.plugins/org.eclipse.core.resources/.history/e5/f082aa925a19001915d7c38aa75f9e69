@@ -41,12 +41,9 @@ public class SAConfigJsonReader {
 					JOptionPane.showMessageDialog(null, "配置文件版本低于1.40，自定义SA将不会被加载");
 					this.willSARun=false;
 				}
-			}catch(Exception e) {
-				JOptionPane.showMessageDialog(null, "读取配置文件时发生错误！\n"+e.getMessage());
-				this.willSARun=false;
-			}
+			}catch(Exception e) {this.willSARun=false;}
 		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
-			JOptionPane.showMessageDialog(null, "配置文件读取失败！\n"+e.getMessage());
+			System.out.println("XCustomizedSA:Fail to load from config.");
 			this.willSARun=false;
 		}
 	}
