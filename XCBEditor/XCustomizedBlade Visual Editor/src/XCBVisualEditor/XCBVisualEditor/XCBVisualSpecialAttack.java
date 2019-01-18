@@ -116,7 +116,7 @@ public class XCBVisualSpecialAttack {
 		frmXCBVisualSA = new JFrame();
 		frmXCBVisualSA.setResizable(false);
 		frmXCBVisualSA.setTitle("XCBVisualEditor -Create SA");
-		frmXCBVisualSA.setBounds(100, 100, 472, 350);
+		frmXCBVisualSA.setBounds(100, 100, 472, 340);
 		frmXCBVisualSA.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmXCBVisualSA.getContentPane().setLayout(null);
 		
@@ -236,10 +236,6 @@ public class XCBVisualSpecialAttack {
 		});
 		delAction.setBounds(343, 191, 102, 35);
 		frmXCBVisualSA.getContentPane().add(delAction);
-		
-		JLabel actionSelected = new JLabel("Not selected.");
-		actionSelected.setBounds(27, 290, 176, 15);
-		frmXCBVisualSA.getContentPane().add(actionSelected);
 		
 		JButton submitSA = new JButton("提交SA");
 		submitSA.addActionListener(new ActionListener() {

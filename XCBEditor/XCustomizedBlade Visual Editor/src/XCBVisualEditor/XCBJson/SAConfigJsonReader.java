@@ -38,7 +38,7 @@ public class SAConfigJsonReader {
 				if(jsoninfo.get("XCustomizedBladeVER").getAsDouble()>=1.40) {
 					jsondata=jsoninfo.get("XCustomizedSA").getAsJsonArray();
 				}else {
-					JOptionPane.showMessageDialog(null, "配置文件版本低于1.40，自定义SA将不会被加载");
+					JOptionPane.showMessageDialog(null, "配置文件版本低于1.40，自定义SA将不会被加载\n可以尝试初始化SA与版本号");
 					this.willSARun=false;
 				}
 			}catch(Exception e) {

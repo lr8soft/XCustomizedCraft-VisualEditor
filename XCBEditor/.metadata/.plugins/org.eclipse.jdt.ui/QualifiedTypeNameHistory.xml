@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="XCBVisualEditor.XCBUtil.XCBListInfo"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.XCBSpecialAttack.SAJsonReader"/>
 <fullyQualifiedTypeName name="XCBVisualEditor.InfoShow"/>
 <fullyQualifiedTypeName name="javax.swing.JFileChooser"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="java.awt.Component"/>
 <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
 <fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="XCBVisualEditor.XCBJson.InitConfigJson"/>
 </qualifiedTypeNameHistroy>

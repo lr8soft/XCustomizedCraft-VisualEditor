@@ -326,6 +326,8 @@ public class ConfigJsonReader {
 					temp.remove("BladeStandBy");temp.remove("BladeSA");
 					temp.remove("SwordColor");temp.remove("BladeName");
 					try {temp.remove("Enchantment");}catch(Exception e) {}
+					try {temp.remove("SELevel");}catch(Exception e) {}
+					try {temp.remove("BladeSE");}catch(Exception e) {}
 					this.json.remove("XCustomizedBladeConfig");
 					this.json.add("XCustomizedBladeConfig", jsondata);
 					Gson out=new Gson();

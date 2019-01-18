@@ -40,11 +40,11 @@ public class SEConfigJsonReader {
 					//this.willSERun=false;
 					try {
 						jsoninfo.get("XCustomizedSE").getAsJsonArray();
-						JOptionPane.showMessageDialog(null, "配置文件存在自定义SE部分，若要加载请将配置文件版本改为1.50以上！");
+						JOptionPane.showMessageDialog(null, "配置文件存在自定义SE部分，若要加载请将配置文件版本改为1.50以上！\n可以尝试初始化版本号");
 					}catch(NullPointerException error) {
 						jsoninfo.add("XCustomizedSE", new JsonArray());
 					}
-					JOptionPane.showMessageDialog(null, "配置文件版本低于1.50，自定义SE将不会被加载");
+					JOptionPane.showMessageDialog(null, "配置文件版本低于1.50，自定义SE将不会被加载\n可以尝试初始化SA与版本号");
 					this.willSERun=false;
 				}
 			}catch(Exception e) {

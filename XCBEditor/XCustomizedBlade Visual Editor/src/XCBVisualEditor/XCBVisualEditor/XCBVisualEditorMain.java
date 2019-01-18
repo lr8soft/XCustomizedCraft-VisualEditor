@@ -209,7 +209,7 @@ public class XCBVisualEditorMain {
 				});
 				btnsa_3.setBounds(300, 107, 115, 23);
 				SAPane.add(btnsa_3);
-		XCCMenu.addTab("SE特殊攻击配置", SEPane);
+		XCCMenu.addTab("SE特殊效果配置", SEPane);
 		
 		JButton btnSE1 = new JButton("添加SE");
 		btnSE1.addActionListener(new ActionListener() {
@@ -266,7 +266,7 @@ public class XCBVisualEditorMain {
 				reloadFromJson(bladelist,salist);
 			}
 		});
-		btnSE4.setBounds(299, 107, 115, 23);
+		btnSE4.setBounds(300, 107, 115, 23);
 		SEPane.add(btnSE4);
 		
 		JButton btnNewButton = new JButton("修改选中");
@@ -437,6 +437,17 @@ public class XCBVisualEditorMain {
 		//frmXCBVisualEditorMain.getContentPane().add(mnNewMenu_2);
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("初始化...");
+		mnNewMenu.add(mntmNewMenuItem_3);
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				XCBConfigInit initWin=new XCBConfigInit(jsondata.path);
+				initWin.frmXccveConfigInit.setVisible(true);
+			}
+		});
+		
 		JMenu mnNewMenu_1 = new JMenu("编辑器设置...");
 		jMenuBar.add(mnNewMenu_1);
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("版本 "+XCustomizedMainLoader.XCCVEVersion);

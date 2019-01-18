@@ -1,0 +1,8 @@
+package XCBVisualEditor.XCBJson;
+
+public class InitConfigJson {
+	private String path;
+	public InitConfigJson(String input) {
+		this.path=input;
+	}
+}

@@ -1,0 +1,5 @@
+package XCBVisualEditor.XCBJson;
+
+public class InitConfigJson {
+
+}
