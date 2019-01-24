@@ -38,7 +38,7 @@ public class XCBVisualSpecialEffect {
 	private boolean allAttack;
 	String[] sainfo= {"幻影剑(一根)","终焉樱","闪电","MaximumBet(快速两斩)","平突","爆炸","次元斩","药水效果","円刃(身边一圈)","波刀龙胆(十字斩)"};
 	private JTextField seLevel;
-	//                      0          1      2         3                   4     5      6         7            8                   9     
+	//                      0          1      2         3               4     5      6         7              
 	public XCBVisualSpecialEffect(SEConfigJsonReader data,String input) {
 		this.classTemp=this;
 		this.jsondata=data;
@@ -81,12 +81,6 @@ public class XCBVisualSpecialEffect {
 							break;
 						case "PE":
 							stepShow.addElement("药水编号"+value.SERuntime[i]+"，总时间"+value.SEDamage[i]);
-							break;
-						case "CS":
-							stepShow.addElement("円刃一次，威力"+value.SEDamage[i]);
-							break;
-						case "WE":
-							stepShow.addElement("波刀龙胆一次，威力"+value.SEDamage[i]);
 							break;
 					}
 				}
@@ -189,14 +183,6 @@ public class XCBVisualSpecialEffect {
 					case 7:
 						stepName.add("PE");
 						stepShow.addElement("药水编号"+count+",持续时间"+damage);
-						break;
-					case 8:
-						stepName.add("CS");
-						stepShow.addElement("円刃一次，威力"+damage);
-						break;
-					case 9:
-						stepName.add("WE");
-						stepShow.addElement("波刀龙胆一次，威力"+damage);
 						break;
 				}
 				stepCount.add(count);

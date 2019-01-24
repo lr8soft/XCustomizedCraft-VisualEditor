@@ -209,14 +209,6 @@ public class XCBVisualSpecialAttack {
 						stepName.add("DL");
 						stepShow.addElement("延时"+count+"单位，单机有效");
 						break;
-					case 8:
-						stepName.add("CS");
-						stepShow.addElement("円刃一次，威力"+damage);
-						break;
-					case 9:
-						stepName.add("WE");
-						stepShow.addElement("波刀龙胆一次，威力"+damage);
-						break;
 				}
 				stepCount.add(count);
 				stepDamage.add(damage);

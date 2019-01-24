@@ -190,14 +190,6 @@ public class XCBVisualSpecialEffect {
 						stepName.add("PE");
 						stepShow.addElement("药水编号"+count+",持续时间"+damage);
 						break;
-					case 8:
-						stepName.add("CS");
-						stepShow.addElement("円刃一次，威力"+damage);
-						break;
-					case 9:
-						stepName.add("WE");
-						stepShow.addElement("波刀龙胆一次，威力"+damage);
-						break;
 				}
 				stepCount.add(count);
 				stepDamage.add(damage);

@@ -10,10 +10,18 @@
       <link>http://www.eclipse.org</link>
     </image>
     <item>
+      <title><![CDATA[Eclipse Specification Process IV: The Specification Committee Votes]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/eclipse-specification-process-iv-specification-committee-votes]]></link>
+      <description><![CDATA[One key difference between Eclipse open source software projects and open source specification projects is that specification projects must be aligned with exactly one specification committee]]></description>
+      <pubDate>Mon, 21 Jan 2019 14:00:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
       <title><![CDATA[Tradista Joins Eclipse Foundation]]></title>
       <link><![CDATA[https://globenewswire.com/news-release/2019/01/10/1685988/0/en/Tradista-Joins-Eclipse-Foundation.html]]></link>
       <description><![CDATA[Tradista will contribute to the Jakarta EE project, bringing its long experience in the Java EE platform applied to the financial sector.]]></description>
-      <pubDate>Thu, 10 Jan 2018 08:35:00 EST</pubDate>
+      <pubDate>Thu, 10 Jan 2019 08:35:00 EST</pubDate>
       <category>news</category>
       <pressrelease>0</pressrelease>
     </item>

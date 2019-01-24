@@ -409,7 +409,7 @@ public class XCBVisualEditorMain {
 		ValueLabel.setBounds(459, 321, 206, 15);
 		frmXCBVisualEditorMain.getContentPane().add(ValueLabel);
 		
-		JLabel xccInfo = new JLabel("For XCustomizedBlade TinyCore 1.60 (1.7.10/1.12.2)");
+		JLabel xccInfo = new JLabel("For XCustomizedBlade TinyCore 1.51 (1.7.10/1.12.2)");
 		xccInfo.setBounds(20, 321, 429, 15);
 		frmXCBVisualEditorMain.getContentPane().add(xccInfo);
 		

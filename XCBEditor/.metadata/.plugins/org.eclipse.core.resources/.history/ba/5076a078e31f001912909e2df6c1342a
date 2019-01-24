@@ -211,11 +211,11 @@ public class XCBVisualSpecialAttack {
 						break;
 					case 8:
 						stepName.add("CS");
-						stepShow.addElement("円刃一次，威力"+damage);
+						stepShow.addElement("延时"+count+"单位，单机有效");
 						break;
 					case 9:
 						stepName.add("WE");
-						stepShow.addElement("波刀龙胆一次，威力"+damage);
+						stepShow.addElement("延时"+count+"单位，单机有效");
 						break;
 				}
 				stepCount.add(count);
