@@ -46,8 +46,8 @@ public class XCBVisualSpecialAttack {
 	private Vector stepDamage=new Vector();
 	private XCBVisualSpecialAttack classTemp;
 	private boolean allAttack;
-	String[] sainfo= {"幻影剑(一根)","终焉樱","闪电","MaximumBet(快速两斩)","平突","爆炸","次元斩","延时(测试 单机有效)","円刃(身边一圈)","波刀龙胆(十字斩)"};
-	//                      0          1      2         3                   4     5      6            7                   8                   9
+	String[] sainfo= {"幻影剑(一根)","终焉樱","闪电","MaximumBet(快速两斩)","平突","爆炸","次元斩","延时(测试 单机有效)","円刃(身边一圈)","波刀龙胆(十字斩)","SetDead"};
+	//                      0          1      2         3                4     5      6            7                   8               9           10
 	public XCBVisualSpecialAttack(SAConfigJsonReader data,String input) {
 		this.classTemp=this;
 		this.jsondata=data;
@@ -98,6 +98,9 @@ public class XCBVisualSpecialAttack {
 							break;
 						case "WE":
 							stepShow.addElement("波刀龙胆一次，威力"+value.StepDamage[i]);
+							break;
+						case "SETD":
+							stepShow.addElement("设置目标死亡");
 							break;
 					}
 				}
@@ -216,6 +219,10 @@ public class XCBVisualSpecialAttack {
 					case 9:
 						stepName.add("WE");
 						stepShow.addElement("波刀龙胆一次，威力"+damage);
+						break;
+					case 10:
+						stepName.add("SETD");
+						stepShow.addElement("设置目标死亡");
 						break;
 				}
 				stepCount.add(count);
