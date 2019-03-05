@@ -12,9 +12,11 @@ import com.google.gson.JsonSyntaxException;
 
 import XCBVisualEditor.XCustomizedMainLoader;
 import XCBVisualEditor.XCBJson.ConfigJsonReader;
+import XCBVisualEditor.XCBJson.EditorConfigJson;
 import XCBVisualEditor.XCBJson.SAConfigJsonReader;
 import XCBVisualEditor.XCBJson.SEConfigJsonReader;
 import XCBVisualEditor.XCBUtil.XCBFileFilter;
+import XCBVisualEditor.XCBUtil.XCBSelectBox;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -24,13 +26,16 @@ import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class XCBConfigLoad {
 	public ConfigJsonReader jsonreader;
 	public JFrame frmXcustomizedbladeVisualeditor;
 	private JTextField pathField;
+	private EditorConfigJson configJson;
 	private XCBConfigLoad thisClass;
 	public XCBConfigLoad() {
+		configJson=new EditorConfigJson();
 		this.jsonreader=null;
 		initialize();
 		this.thisClass=this;
@@ -39,12 +44,12 @@ public class XCBConfigLoad {
 		frmXcustomizedbladeVisualeditor = new JFrame();
 		frmXcustomizedbladeVisualeditor.setTitle("XCustomizedBlade VisualEditor");
 		frmXcustomizedbladeVisualeditor.setResizable(false);
-		frmXcustomizedbladeVisualeditor.setBounds(100, 100, 473, 156);
+		frmXcustomizedbladeVisualeditor.setBounds(100, 100, 473, 200);
 		frmXcustomizedbladeVisualeditor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmXcustomizedbladeVisualeditor.getContentPane().setLayout(null);
 		
 		pathField = new JTextField();
-		pathField.setBounds(95, 31, 236, 28);
+		pathField.setBounds(99, 30, 236, 28);
 		frmXcustomizedbladeVisualeditor.getContentPane().add(pathField);
 		pathField.setColumns(10);
 		
@@ -70,6 +75,7 @@ public class XCBConfigLoad {
 					if(jsonreader != null) {
 						XCustomizedMainLoader.vemain=new XCBVisualEditorMain(jsonreader,sareader,sereader);
 						XCustomizedMainLoader.vemain.frmXCBVisualEditorMain.setVisible(true);
+						configJson.AddToConfig(pathField.getText());
 						frmXcustomizedbladeVisualeditor.setVisible(false);
 						try {
 							thisClass.finalize();
@@ -78,7 +84,7 @@ public class XCBConfigLoad {
 				}
 			}
 		});
-		btnSubmit.setBounds(190, 77, 117, 28);
+		btnSubmit.setBounds(188, 112, 117, 28);
 		frmXcustomizedbladeVisualeditor.getContentPane().add(btnSubmit);
 		
 		JButton btnCancel = new JButton("取消");
@@ -87,7 +93,7 @@ public class XCBConfigLoad {
 				System.exit(0);
 			}
 		});
-		btnCancel.setBounds(317, 77, 117, 28);
+		btnCancel.setBounds(317, 112, 117, 28);
 		frmXcustomizedbladeVisualeditor.getContentPane().add(btnCancel);
 		
 		JButton btnNewButton_2 = new JButton("浏览...");
@@ -108,6 +114,26 @@ public class XCBConfigLoad {
 		btnNewButton_2.setBounds(341, 30, 93, 29);
 		frmXcustomizedbladeVisualeditor.getContentPane().add(btnNewButton_2);
 		
+		JComboBox comboBox=new JComboBox();
+		comboBox.setEditable(false);
+		if(configJson.jsoninfo!=null) {
+			comboBox=new JComboBox<>(new XCBSelectBox(configJson.GetConfigList()));
+			comboBox.setEnabled(true);
+		}
+		comboBox.setBounds(99, 71, 337, 28);
+		JComboBox temp=comboBox;
+		comboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				pathField.setText(temp.getSelectedItem().toString());
+			}
+			
+		});
+		frmXcustomizedbladeVisualeditor.getContentPane().add(comboBox);
+		
+		JLabel label_1 = new JLabel("历史记录");
+		label_1.setBounds(25, 71, 60, 28);
+		frmXcustomizedbladeVisualeditor.getContentPane().add(label_1);
+		
 	}
-
 }
