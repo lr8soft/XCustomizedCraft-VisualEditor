@@ -11,6 +11,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import XCBVisualEditor.XCBUtil.XCBFileOperate;
+
 public class SyncJsonReader {
 	private String jsonpath;
 	private JsonObject jsonfile,jsondata;
@@ -48,21 +50,9 @@ public class SyncJsonReader {
 		if(jsondata!=null) {
 			jsondata.remove("ServerHostName");
 			jsondata.addProperty("ServerHostName",address);
-			this.jsonfile.remove("ServerInfo");
-			this.jsonfile.add("ServerInfo", jsondata);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(jsonpath);
-				output.write(out.toJson(jsonfile).getBytes());
-				output.close();
-				return 1;
-			} catch (FileNotFoundException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			} catch (IOException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			}
+			
+			return XCBFileOperate.writeObjectToJson(jsonfile, jsondata, "ServerInfo", jsonpath);
+
 		}
 		return 0;
 	}
@@ -70,21 +60,8 @@ public class SyncJsonReader {
 		if(jsondata!=null) {
 			jsondata.remove("ServerPort");
 			jsondata.addProperty("ServerPort",address);
-			this.jsonfile.remove("ServerInfo");
-			this.jsonfile.add("ServerInfo", jsondata);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(jsonpath);
-				output.write(out.toJson(jsonfile).getBytes());
-				output.close();
-				return 1;
-			} catch (FileNotFoundException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			} catch (IOException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			}
+
+			return XCBFileOperate.writeObjectToJson(jsonfile, jsondata, "ServerInfo", jsonpath);
 		}
 		return 0;
 	}
@@ -92,21 +69,8 @@ public class SyncJsonReader {
 		if(jsondata!=null) {
 			jsondata.remove("SyncConfig");
 			jsondata.addProperty("SyncConfig",address);
-			this.jsonfile.remove("ServerInfo");
-			this.jsonfile.add("ServerInfo", jsondata);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(jsonpath);
-				output.write(out.toJson(jsonfile).getBytes());
-				output.close();
-				return 1;
-			} catch (FileNotFoundException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			} catch (IOException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			}
+			
+			return XCBFileOperate.writeObjectToJson(jsonfile, jsondata, "ServerInfo", jsonpath);
 		}
 		return 0;
 	}

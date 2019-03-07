@@ -16,6 +16,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import XCBVisualEditor.XCDJsonSAInfo;
+import XCBVisualEditor.XCBUtil.XCBFileOperate;
 import XCBVisualEditor.XCBUtil.XCBToJsonArray;
 
 
@@ -132,21 +133,8 @@ public class SAConfigJsonReader {
 					temp.remove("BladeStandBy");temp.remove("BladeSA");
 					temp.remove("SACount");
 					try {temp.remove("PeaceSelector");}catch(Exception e) {}
-					this.jsoninfo.remove("XCustomizedSA");
-					this.jsoninfo.add("XCustomizedSA", jsondata);
-					Gson out=new Gson();
-					try {
-						FileOutputStream output=new FileOutputStream(jsonpath);
-						output.write(out.toJson(jsoninfo).getBytes());
-						output.close();
-					} catch (FileNotFoundException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return -1;
-					} catch (IOException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return -1;
-					}
-					return 1;
+					
+					return XCBFileOperate.writeToJson(jsoninfo, jsondata, "XCustomizedSA", jsonpath);
 				}
 			}catch(NullPointerException e) {
 				continue;
@@ -170,21 +158,12 @@ public class SAConfigJsonReader {
 					try {temp.remove("PeaceSelector");}catch(Exception e) {};
 					temp.addProperty("PeaceSelector",allAttack);
 					//this.jsondata.add(temp);
-					this.jsoninfo.remove("XCustomizedSA");
-					this.jsoninfo.add("XCustomizedSA", jsondata);
-					Gson out=new Gson();
-					try {
-						FileOutputStream output=new FileOutputStream(jsonpath);
-						output.write(out.toJson(jsoninfo).getBytes());
-						output.close();
-					} catch (FileNotFoundException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return 0;
-					} catch (IOException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return 0;
-					}
-					return 2;
+					
+					int ret=XCBFileOperate.writeToJson(jsoninfo, jsondata, "XCustomizedSA", jsonpath);
+					if(ret==1)
+						return 2;
+					else
+						return ret;
 				}
 			}catch(NullPointerException e) {
 				continue;
@@ -202,21 +181,9 @@ public class SAConfigJsonReader {
 			temp.add("StepDamage", XCBToJsonArray.IntToJsonArray(damage));
 			temp.add("SAStep", XCBToJsonArray.IntToJsonArray(count));
 			temp.addProperty("SACount", step.length);
+			
 			this.jsondata.add(temp);
-			this.jsoninfo.add("XCustomizedSA", jsondata);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(jsonpath);
-				output.write(out.toJson(jsoninfo).getBytes());
-				output.close();
-			} catch (FileNotFoundException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			} catch (IOException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			}
-			return 1;
+			return XCBFileOperate.writeToJson(jsoninfo, jsondata, "XCustomizedSA", jsonpath);
 		}else {
 			int rret=changeToJson(name,num,cost,step,count,damage,allAttack);
 			return rret;

@@ -16,6 +16,7 @@ import com.google.gson.JsonSyntaxException;
 
 import XCBVisualEditor.XCDJsonSAInfo;
 import XCBVisualEditor.XCDJsonSEInfo;
+import XCBVisualEditor.XCBUtil.XCBFileOperate;
 import XCBVisualEditor.XCBUtil.XCBToJsonArray;
 
 public class SEConfigJsonReader {
@@ -98,11 +99,11 @@ public class SEConfigJsonReader {
 					JsonArray damage=tempobj.get("SEDamage").getAsJsonArray();
 					String[] stepName=new String[step.size()];
 					int[] stepRuntime=new int[step.size()];
-					double[] stepDamage=new double[step.size()];
+					int[] stepDamage=new int[step.size()];
 					for(int len=0;len<step.size();len++) {
 						stepName[len]=step.get(len).getAsString();
 						stepRuntime[len]=runtime.get(len).getAsInt();
-						stepDamage[len]=damage.get(len).getAsDouble();
+						stepDamage[len]=damage.get(len).getAsInt();
 					}
 					if(name==null||step==null||runtime==null||damage==null) continue;
 					ret=new XCDJsonSEInfo(name,cost,level,stepName,stepRuntime,stepDamage);
@@ -124,21 +125,8 @@ public class SEConfigJsonReader {
 					temp.remove("SEName");temp.remove("SECost");
 					temp.remove("SELevel");temp.remove("SEStep");
 					temp.remove("SERuntime");temp.remove("SEDamage");
-					this.jsoninfo.remove("XCustomizedSE");
-					this.jsoninfo.add("XCustomizedSE", jsondata);
-					Gson out=new Gson();
-					try {
-						FileOutputStream output=new FileOutputStream(jsonpath);
-						output.write(out.toJson(jsoninfo).getBytes());
-						output.close();
-					} catch (FileNotFoundException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return -1;
-					} catch (IOException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return -1;
-					}
-					return 1;
+					
+					return XCBFileOperate.writeToJson(jsoninfo, jsondata, "XCustomizedSE", jsonpath);
 				}
 			}catch(NullPointerException e) {
 				continue;
@@ -160,21 +148,11 @@ public class SEConfigJsonReader {
 					temp.remove("SEDamage");temp.add("SEDamage", XCBToJsonArray.IntToJsonArray(damage));
 
 					//this.jsondata.add(temp);
-					this.jsoninfo.remove("XCustomizedSE");
-					this.jsoninfo.add("XCustomizedSE", jsondata);
-					Gson out=new Gson();
-					try {
-						FileOutputStream output=new FileOutputStream(jsonpath);
-						output.write(out.toJson(jsoninfo).getBytes());
-						output.close();
-					} catch (FileNotFoundException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return 0;
-					} catch (IOException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return 0;
-					}
-					return 2;
+					int ret=XCBFileOperate.writeToJson(jsoninfo, jsondata, "XCustomizedSE", jsonpath);
+					if(ret==1)
+						return 2;
+					else
+						return ret;
 				}
 			}catch(NullPointerException e) {
 				continue;
@@ -192,20 +170,8 @@ public class SEConfigJsonReader {
 			temp.add("SERuntime", XCBToJsonArray.IntToJsonArray(count));
 			temp.add("SEDamage", XCBToJsonArray.IntToJsonArray(damage));
 			this.jsondata.add(temp);
-			this.jsoninfo.add("XCustomizedSE", jsondata);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(jsonpath);
-				output.write(out.toJson(jsoninfo).getBytes());
-				output.close();
-			} catch (FileNotFoundException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			} catch (IOException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			}
-			return 1;
+			
+			return XCBFileOperate.writeToJson(jsoninfo, jsondata, "XCustomizedSE", jsonpath);
 		}else {
 			int rret=changeToJson(name,level,cost,stepName,count,damage);
 			return rret;

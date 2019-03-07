@@ -1,7 +1,5 @@
 package XCBVisualEditor;
 
-import java.awt.EventQueue;
-
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -11,7 +9,7 @@ import XCBVisualEditor.XCBVisualEditor.XCBVisualEditorMain;
 public class XCustomizedMainLoader {
 	public static XCBConfigLoad configload;
 	public static XCBVisualEditorMain vemain;
-	public final static String XCCVEVersion="v1.48";
+	public final static String XCCVEVersion="v1.49";
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

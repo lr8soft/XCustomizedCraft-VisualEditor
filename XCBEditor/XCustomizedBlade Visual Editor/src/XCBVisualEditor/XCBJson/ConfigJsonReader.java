@@ -18,6 +18,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import XCBVisualEditor.XCDJsonDetailInfo;
+import XCBVisualEditor.XCBUtil.XCBFileOperate;
 import XCBVisualEditor.XCBUtil.XCBGetPath;
 import XCBVisualEditor.XCBUtil.XCBToJsonArray;
 public class ConfigJsonReader {
@@ -34,21 +35,7 @@ public class ConfigJsonReader {
 	}
 	public int changeTinyCore(boolean sync) {
 		try {
-			json.remove("XCBTinyCore");
-			json.addProperty("XCBTinyCore", sync);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(path);
-				output.write(out.toJson(json).getBytes());
-				output.close();
-				return 1;
-			} catch (FileNotFoundException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			} catch (IOException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-				return 0;
-			}
+			return XCBFileOperate.writeBooleanToJson(json, sync, "XCBTinyCore", path);
 		}catch(NullPointerException error) {
 			return 0;
 		}
@@ -241,20 +228,8 @@ public class ConfigJsonReader {
 					temp.addProperty("BladeSE", info.SEName);
 					temp.addProperty("SELevel", info.SELevel);
 					temp.add("Enchantment",XCBToJsonArray.VectorToJsonArray(info.EnchantName, info.EnchantLevel));
-					//this.jsondata.add(temp);
-				//	this.json.add("XCustomizedBladeConfig", jsondata);
-					this.json.remove("XCustomizedBladeConfig");
-					this.json.add("XCustomizedBladeConfig", jsondata);
-					Gson out=new Gson();
-					try {
-						FileOutputStream output=new FileOutputStream(path);
-						output.write(out.toJson(json).getBytes());
-						output.close();
-					} catch (FileNotFoundException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-					} catch (IOException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-					}
+				
+					XCBFileOperate.writeToJson(json, jsondata, "XCustomizedBladeConfig", path);
 				}
 			}catch(NullPointerException e) {
 				continue;
@@ -299,20 +274,11 @@ public class ConfigJsonReader {
 			temp.addProperty("SwordColor",info.color);
 			JsonArray ret=XCBToJsonArray.VectorToJsonArray(info.EnchantName, info.EnchantLevel);
 			if(ret!=null)temp.add("Enchantment",ret);
+			
 			this.jsondata.add(temp);
-			this.json.add("XCustomizedBladeConfig", jsondata);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(path);
-				output.write(out.toJson(json).getBytes());
-				output.close();
-			} catch (FileNotFoundException e) {
-				return -1;
-			} catch (IOException e) {
-				return -1;
-			}
+			int retNum= XCBFileOperate.writeToJson(json, jsondata, "XCustomizedBladeConfig", path);
 			this.readFromJson();
-			return 1;
+			return retNum;
 		}
 	}
 	public int deleteToJson(String name) {
@@ -328,21 +294,8 @@ public class ConfigJsonReader {
 					try {temp.remove("Enchantment");}catch(Exception e) {}
 					try {temp.remove("SELevel");}catch(Exception e) {}
 					try {temp.remove("BladeSE");}catch(Exception e) {}
-					this.json.remove("XCustomizedBladeConfig");
-					this.json.add("XCustomizedBladeConfig", jsondata);
-					Gson out=new Gson();
-					try {
-						FileOutputStream output=new FileOutputStream(path);
-						output.write(out.toJson(json).getBytes());
-						output.close();
-					} catch (FileNotFoundException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return -1;
-					} catch (IOException e) {
-						System.out.println("XCC Error:"+e.getMessage());
-						return -1;
-					}
-					return 1;
+					
+					return XCBFileOperate.writeToJson(json, jsondata, "XCustomizedBladeConfig", path);
 				}
 			}catch(NullPointerException e) {
 				continue;

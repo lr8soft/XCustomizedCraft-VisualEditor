@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import XCBVisualEditor.XCBUtil.XCBFileOperate;
 import XCBVisualEditor.XCBUtil.XCBGetPath;
 
 public class EditorConfigJson {
@@ -55,17 +56,7 @@ public class EditorConfigJson {
 		if(jsoninfo!=null) {
 			if(isExisted(info)) return;
 			configinfo.add(info);
-			jsoninfo.add("ConfigPath", configinfo);
-			Gson out=new Gson();
-			try {
-				FileOutputStream output=new FileOutputStream(jsonpath);
-				output.write(out.toJson(jsoninfo).getBytes());
-				output.close();
-			} catch (FileNotFoundException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-			} catch (IOException e) {
-				System.out.println("XCC Error:"+e.getMessage());
-			}
+			XCBFileOperate.writeToJson(jsoninfo, configinfo, "ConfigPath", jsonpath);
 		}
 	}
 	private boolean isExisted(String name) {
